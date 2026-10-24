@@ -103,4 +103,67 @@ def buscar_vagas():
 
                 links_vistos.add(link)
 
-                vagas_encontradas.append
+                vagas_encontradas.append(
+                    {
+                        "titulo": titulo,
+                        "link": link
+                    }
+                )
+
+        except Exception as erro:
+
+            print("Erro na busca:", erro)
+
+    return vagas_encontradas
+
+
+def enviar_telegram(texto):
+
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+    requests.post(
+        url,
+        data={
+            "chat_id": chat_id,
+            "text": texto[:4000]
+        },
+        timeout=30
+    )
+
+
+def main():
+
+    vagas = buscar_vagas()
+
+    cabecalho = (
+        f"📢 Radar de Estágios - Belém/PA\n"
+        f"{datetime.now().strftime('%d/%m/%Y')}\n\n"
+    )
+
+    if not vagas:
+
+        mensagem = (
+            cabecalho
+            + "Nenhuma vaga compatível encontrada hoje."
+        )
+
+    else:
+
+        linhas = []
+
+        for vaga in vagas[:15]:
+
+            linhas.append(
+                f"• {vaga['titulo']}\n{vaga['link']}"
+            )
+
+        mensagem = cabecalho + "\n\n".join(linhas)
+
+    enviar_telegram(mensagem)
+
+
+if __name__ == "__main__":
+    main()
