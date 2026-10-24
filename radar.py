@@ -11,6 +11,26 @@ BUSCAS = [
     "estágio desenvolvimento software Belém PA",
     "estágio moda Belém PA",
     "estágio design de moda Belém PA"
+    "site:gupy.io estágio tecnologia Belém",
+    "site:gupy.io estágio TI Belém",
+    "site:gupy.io estágio ciência da computação Belém",
+
+    "site:linkedin.com/jobs estágio tecnologia Belém",
+    "site:linkedin.com/jobs estágio TI Belém",
+    "site:linkedin.com/jobs estágio computação Belém",
+
+    "site:indeed.com estágio tecnologia Belém",
+    "site:indeed.com estágio TI Belém",
+
+    "site:ciee.org.br estágio Belém tecnologia",
+    "site:iel-pa.org.br estágio Belém",
+
+    "site:gupy.io estágio moda Belém",
+    "site:gupy.io estágio design de moda Belém",
+
+    "site:linkedin.com/jobs estágio moda Belém",
+    "site:linkedin.com/jobs estágio design de moda Belém"
+]
 ]
 
 
