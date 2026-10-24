@@ -1,7 +1,11 @@
 name: Radar diario
 
 on:
+
   workflow_dispatch:
+
+  schedule:
+    - cron: "0 11 * * *"
 
 jobs:
 
