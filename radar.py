@@ -4,17 +4,7 @@ import feedparser
 from datetime import datetime
 
 BUSCAS = [
-    "estágio tecnologia Belém PA",
-    "estágio TI Belém PA",
-    "estágio ciência da computação Belém PA",
-    "estágio sistemas de informação Belém PA",
-    "estágio desenvolvimento software Belém PA",
-    "estágio moda Belém PA",
-    "estágio design de moda Belém PA"
-    "site:gupy.io estágio tecnologia Belém",
-    "site:gupy.io estágio TI Belém",
-    "site:gupy.io estágio ciência da computação Belém",
-
+   
     "site:linkedin.com/jobs estágio tecnologia Belém",
     "site:linkedin.com/jobs estágio TI Belém",
     "site:linkedin.com/jobs estágio computação Belém",
