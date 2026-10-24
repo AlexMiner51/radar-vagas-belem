@@ -1,11 +1,7 @@
 name: Radar diario
 
 on:
-
   workflow_dispatch:
-
-  schedule:
-    - cron: "0 11 * * *"
 
 jobs:
 
@@ -23,19 +19,8 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: Teste Telegram
+      - name: Executar Radar
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python radar.py
-
-      - name: Salvar histórico
-        run: |
-          git*config user.name "github-actions"
-*         git config user.email "gi*hub-actions@github.com"
-
-         *git add seen.json
-         
-          git d*ff --staged --quiet || git commit *m "Atualiza histórico"
-          
-          *it push
