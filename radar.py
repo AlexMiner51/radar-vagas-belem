@@ -1,35 +1,36 @@
 import os
+import json
 import requests
 import feedparser
 from datetime import datetime
 
 BUSCAS = [
-    "site:gupy.io estágio tecnologia Belém",
-    "site:gupy.io estágio TI Belém",
-    "site:gupy.io estágio ciência da computação Belém",
-    "site:gupy.io estágio sistemas de informação Belém",
-    "site:gupy.io estágio desenvolvimento software Belém",
+    "site:gupy.io estágio tecnologia Belém Pará",
+    "site:gupy.io estágio TI Belém Pará",
+    "site:gupy.io estágio ciência da computação Belém Pará",
+    "site:gupy.io estágio sistemas de informação Belém Pará",
+    "site:gupy.io estágio desenvolvimento software Belém Pará",
 
-    "site:linkedin.com/jobs estágio tecnologia Belém",
-    "site:linkedin.com/jobs estágio TI Belém",
-    "site:linkedin.com/jobs estágio computação Belém",
+    "site:linkedin.com/jobs estágio tecnologia Belém Pará",
+    "site:linkedin.com/jobs estágio TI Belém Pará",
+    "site:linkedin.com/jobs estágio computação Belém Pará",
 
-    "site:indeed.com estágio tecnologia Belém",
-    "site:indeed.com estágio TI Belém",
+    "site:indeed.com estágio tecnologia Belém Pará",
+    "site:indeed.com estágio TI Belém Pará",
 
-    "site:ciee.org.br estágio Belém tecnologia",
-    "site:iel-pa.org.br estágio Belém",
+    "site:ciee.org.br estágio Belém Pará",
+    "site:iel-pa.org.br estágio Belém Pará",
 
-    "site:gupy.io estágio moda Belém",
-    "site:gupy.io estágio design de moda Belém",
+    "site:gupy.io estágio moda Belém Pará",
+    "site:gupy.io estágio design de moda Belém Pará",
 
-    "site:linkedin.com/jobs estágio moda Belém",
-    "site:linkedin.com/jobs estágio design de moda Belém"
+    "site:linkedin.com/jobs estágio moda Belém Pará",
+    "site:linkedin.com/jobs estágio design de moda Belém Pará"
 ]
 
-PALAVRAS_BELEM = [
+PALAVRAS_OBRIGATORIAS = [
     "belém",
-    "belem"
+    "pará"
 ]
 
 PALAVRAS_ESTAGIO = [
@@ -41,6 +42,12 @@ PALAVRAS_ESTAGIO = [
 ]
 
 PALAVRAS_BLOQUEADAS = [
+    "guiné",
+    "guinea",
+    "guiné-bissau",
+    "bissau",
+    "africa",
+    "south africa",
     "home office",
     "remoto",
     "remote",
@@ -50,17 +57,35 @@ PALAVRAS_BLOQUEADAS = [
     "curitiba",
     "porto alegre",
     "bangkok",
-    "thailand",
-    "africa",
-    "south africa"
+    "thailand"
 ]
+
+
+def carregar_historico():
+
+    try:
+        with open("seen.json", "r", encoding="utf-8") as f:
+            return set(json.load(f))
+    except:
+        return set()
+
+
+def salvar_historico(historico):
+
+    with open("seen.json", "w", encoding="utf-8") as f:
+        json.dump(
+            list(historico),
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
 
 
 def vaga_valida(texto):
 
     texto = texto.lower()
 
-    if not any(p in texto for p in PALAVRAS_BELEM):
+    if not all(p in texto for p in PALAVRAS_OBRIGATORIAS):
         return False
 
     if not any(p in texto for p in PALAVRAS_ESTAGIO):
@@ -74,8 +99,9 @@ def vaga_valida(texto):
 
 def buscar_vagas():
 
-    vagas_encontradas = []
-    links_vistos = set()
+    vagas = []
+
+    historico = carregar_historico()
 
     for busca in BUSCAS:
 
@@ -93,17 +119,17 @@ def buscar_vagas():
                 titulo = item.title.strip()
                 link = item.link.strip()
 
-                texto = titulo + " " + link
+                texto = f"{titulo} {link}"
 
                 if not vaga_valida(texto):
                     continue
 
-                if link in links_vistos:
+                if link in historico:
                     continue
 
-                links_vistos.add(link)
+                historico.add(link)
 
-                vagas_encontradas.append(
+                vagas.append(
                     {
                         "titulo": titulo,
                         "link": link
@@ -112,9 +138,11 @@ def buscar_vagas():
 
         except Exception as erro:
 
-            print("Erro na busca:", erro)
+            print("Erro:", erro)
 
-    return vagas_encontradas
+    salvar_historico(historico)
+
+    return vagas
 
 
 def enviar_telegram(texto):
@@ -147,7 +175,7 @@ def main():
 
         mensagem = (
             cabecalho
-            + "Nenhuma vaga compatível encontrada hoje."
+            + "Nenhuma nova vaga encontrada hoje."
         )
 
     else:
