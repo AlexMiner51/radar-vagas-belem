@@ -31,7 +31,6 @@ BUSCAS = [
     "site:linkedin.com/jobs estágio moda Belém",
     "site:linkedin.com/jobs estágio design de moda Belém"
 ]
-]
 
 
 def buscar_vagas():
