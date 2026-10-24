@@ -1,1 +1,23 @@
+name: Teste Fontes
 
+on:
+  workflow_dispatch:
+
+jobs:
+
+  teste:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests
+
+      - name: Testar fontes
+        run: python teste_fontes.py
