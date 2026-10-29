@@ -48,6 +48,8 @@ BUSCAS = [
     "site:https://portal.ciee.org.br/quero-uma-vaga/ trainee Belém Pará"
     "site:https://app.eureca.me/oportunidades estágio Belém Pará"
     "site:https://app.eureca.me/oportunidades trainee Belém Pará"
+    "site:https://www.superestagios.com.br/index/vagasEstagio.php estágio Belém Pará"
+    "site:https://www.superestagios.com.br/index/vagasEstagio.php trainee Belém Pará"
     
 ]
 
