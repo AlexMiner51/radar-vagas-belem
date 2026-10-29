@@ -50,6 +50,8 @@ BUSCAS = [
     "site:https://app.eureca.me/oportunidades trainee Belém Pará"
     "site:https://www.superestagios.com.br/index/vagasEstagio.php estágio Belém Pará"
     "site:https://www.superestagios.com.br/index/vagasEstagio.php trainee Belém Pará"
+    "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar estágio Belém Pará"
+    "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar trainee Belém Pará"
     
 ]
 
