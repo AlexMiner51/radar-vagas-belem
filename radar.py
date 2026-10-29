@@ -6,34 +6,82 @@ from datetime import datetime
 
 BUSCAS = [
 
+    # GUPY
     "site:gupy.io estágio tecnologia Belém Pará",
     "site:gupy.io estágio TI Belém Pará",
     "site:gupy.io estágio ciência da computação Belém Pará",
     "site:gupy.io estágio sistemas de informação Belém Pará",
     "site:gupy.io estágio desenvolvimento software Belém Pará",
-
-    "site:linkedin.com/jobs estágio tecnologia Belém Pará",
-    "site:linkedin.com/jobs estágio TI Belém Pará",
-    "site:linkedin.com/jobs estágio computação Belém Pará",
-
-    "site:indeed.com estágio tecnologia Belém Pará",
-    "site:indeed.com estágio TI Belém Pará",
-
-    "site:ciee.org.br estágio Belém Pará",
-    "site:iel-pa.org.br estágio Belém Pará",
-
     "site:gupy.io estágio moda Belém Pará",
     "site:gupy.io estágio design de moda Belém Pará",
 
+    # LINKEDIN
+    "site:linkedin.com/jobs estágio tecnologia Belém Pará",
+    "site:linkedin.com/jobs estágio TI Belém Pará",
+    "site:linkedin.com/jobs estágio computação Belém Pará",
     "site:linkedin.com/jobs estágio moda Belém Pará",
     "site:linkedin.com/jobs estágio design de moda Belém Pará",
 
+    # INDEED
+    "site:indeed.com estágio tecnologia Belém Pará",
+    "site:indeed.com estágio TI Belém Pará",
+    "site:indeed.com estágio computação Belém Pará",
+    "site:indeed.com estágio moda Belém Pará",
+
+    # CIEE
+    "site:ciee.org.br estágio Belém Pará",
+    "site:ciee.org.br estágio tecnologia Belém Pará",
+
+    # IEL
+    "site:iel-pa.org.br estágio Belém Pará",
+    "site:iel-pa.org.br TI Belém Pará",
+    "site:iel-pa.org.br tecnologia Belém Pará",
+
+    # INSTAGRAM PAINEL DE EMPREGOS
     "site:instagram.com/paineldeempregospara estágio Belém Pará",
     "site:instagram.com/paineldeempregospara tecnologia Belém Pará",
     "site:instagram.com/paineldeempregospara TI Belém Pará",
     "site:instagram.com/paineldeempregospara computação Belém Pará",
     "site:instagram.com/paineldeempregospara moda Belém Pará",
-    "site:instagram.com/paineldeempregospara design de moda Belém Pará"
+    "site:instagram.com/paineldeempregospara design de moda Belém Pará",
+
+    # SITE PAINEL DE EMPREGOS PARA
+    "site:paineldeempregospara.com.br estágio Belém Pará",
+    "site:paineldeempregospara.com.br tecnologia Belém Pará",
+    "site:paineldeempregospara.com.br TI Belém Pará",
+    "site:paineldeempregospara.com.br computação Belém Pará",
+    "site:paineldeempregospara.com.br moda Belém Pará",
+
+    # ABRH / EMPREGA PARÁ
+    "site:abrhpa.org.br estágio Belém Pará",
+    "site:sistema.abrhpa.org.br estágio Belém Pará",
+
+    # INFOJOBS
+    "site:infojobs.com.br estágio Belém Pará",
+    "site:infojobs.com.br TI Belém Pará",
+    "site:infojobs.com.br tecnologia Belém Pará",
+    "site:infojobs.com.br moda Belém Pará",
+
+    # BNE
+    "site:bne.com.br estagiário Belém Pará",
+    "site:bne.com.br estágio tecnologia Belém Pará",
+    "site:bne.com.br estágio TI Belém Pará",
+
+    # VAGAS.COM
+    "site:vagas.com.br estágio Belém Pará",
+    "site:vagas.com.br tecnologia Belém Pará",
+    "site:vagas.com.br TI Belém Pará",
+
+    # GLASSDOOR
+    "site:glassdoor.com.br estágio Belém Pará",
+    "site:glassdoor.com.br tecnologia Belém Pará",
+
+    # JOOBLE
+    "site:jooble.org estágio Belém Pará",
+    "site:jooble.org TI Belém Pará",
+
+    # PREFEITURA DE BELÉM
+    "site:prefeitura.belem.pa.gov.br estágio Belém Pará"
 ]
 
 PALAVRAS_OBRIGATORIAS = [
