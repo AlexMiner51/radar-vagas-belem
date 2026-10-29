@@ -26,6 +26,19 @@ BUSCAS = [
 
     "site:linkedin.com/jobs estágio moda Belém Pará",
     "site:linkedin.com/jobs estágio design de moda Belém Pará"
+
+    "site:sejatrainee.com.br estágio Belém Pará",
+    "site:sejatrainee.com.br tecnologia Belém Pará",
+    "site:sejatrainee.com.br TI Belém Pará",
+    "site:sejatrainee.com.br computação Belém Pará",
+    "site:sejatrainee.com.br moda Belém Pará",
+
+    "site:estagiotrainee.com estágio Belém Pará",
+    "site:estagiotrainee.com tecnologia Belém Pará",
+    "site:estagiotrainee.com TI Belém Pará",
+    "site:estagiotrainee.com computação Belém Pará",
+    "site:estagiotrainee.com moda Belém Pará"
+    
 ]
 
 PALAVRAS_OBRIGATORIAS = [
