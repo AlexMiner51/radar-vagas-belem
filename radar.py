@@ -5,6 +5,7 @@ import feedparser
 from datetime import datetime
 
 BUSCAS = [
+
     "site:gupy.io estágio tecnologia Belém Pará",
     "site:gupy.io estágio TI Belém Pará",
     "site:gupy.io estágio ciência da computação Belém Pará",
@@ -25,7 +26,14 @@ BUSCAS = [
     "site:gupy.io estágio design de moda Belém Pará",
 
     "site:linkedin.com/jobs estágio moda Belém Pará",
-    "site:linkedin.com/jobs estágio design de moda Belém Pará"
+    "site:linkedin.com/jobs estágio design de moda Belém Pará",
+
+    "site:instagram.com/paineldeempregospara estágio Belém Pará",
+    "site:instagram.com/paineldeempregospara tecnologia Belém Pará",
+    "site:instagram.com/paineldeempregospara TI Belém Pará",
+    "site:instagram.com/paineldeempregospara computação Belém Pará",
+    "site:instagram.com/paineldeempregospara moda Belém Pará",
+    "site:instagram.com/paineldeempregospara design de moda Belém Pará"
 ]
 
 PALAVRAS_OBRIGATORIAS = [
