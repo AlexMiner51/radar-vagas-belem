@@ -38,6 +38,10 @@ BUSCAS = [
     "site:estagiotrainee.com TI Belém Pará",
     "site:estagiotrainee.com computação Belém Pará",
     "site:estagiotrainee.com moda Belém Pará"
+    "site:https://www.ciadetalentos.com.br/#jobs estágio Belém Pará"
+    "site:https://www.ciadetalentos.com.br/#jobs trainee Belém Pará"
+    "site:https://www.ciadeestagios.com.br/vagas-de-estagio/ estágio Belém Pará"
+    "site:https://www.ciadeestagios.com.br/vagas-de-estagio/ trainee Belém Pará"
     
 ]
 
