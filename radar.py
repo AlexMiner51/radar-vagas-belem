@@ -46,6 +46,8 @@ BUSCAS = [
     "site:https://www.nube.com.br/ trainee Belém Pará"
     "site:https://portal.ciee.org.br/quero-uma-vaga/ estágio Belém Pará"
     "site:https://portal.ciee.org.br/quero-uma-vaga/ trainee Belém Pará"
+    "site:https://app.eureca.me/oportunidades estágio Belém Pará"
+    "site:https://app.eureca.me/oportunidades trainee Belém Pará"
     
 ]
 
