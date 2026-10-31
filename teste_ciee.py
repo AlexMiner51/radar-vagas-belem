@@ -1,58 +1,35 @@
 import requests
+import json
 
-for pagina in range(1, 21):
+url = (
+    "https://api.ciee.org.br/core/city/search"
+    "?filter=belem"
+)
 
-    url = (
-        "https://api.ciee.org.br/vagas/"
-        f"vitrine-vaga/publicadas?page={pagina}"
+resposta = requests.get(
+    url,
+    headers={
+        "User-Agent": "Mozilla/5.0"
+    },
+    timeout=30
+)
+
+print("STATUS:", resposta.status_code)
+
+try:
+
+    dados = resposta.json()
+
+    print(
+        json.dumps(
+            dados,
+            ensure_ascii=False,
+            indent=2
+        )[:5000]
     )
 
-    dados = requests.get(
-        url,
-        headers={
-            "User-Agent": "Mozilla/5.0"
-        },
-        timeout=30
-    ).json()
+except Exception:
 
-    print()
-    print("=" * 50)
-    print("PÁGINA", pagina)
-    print("=" * 50)
-
-    encontrou = False
-
-    for vaga in dados["content"]:
-
-        local = vaga.get("local")
-
-        if not local:
-            continue
-
-        uf = local.get(
-            "uf",
-            ""
-        )
-
-        cidade = local.get(
-            "cidade",
-            ""
-        )
-
-        if uf == "PA":
-
-            encontrou = True
-
-            print(
-                cidade,
-                "-",
-                vaga.get(
-                    "areaProfissional"
-                )
-            )
-
-    if encontrou:
-
-        print(
-            "\nACHOU VAGA(S) DO PARÁ!"
-        )
+    print(
+        resposta.text[:5000]
+    )
