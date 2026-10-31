@@ -59,7 +59,7 @@ BUSCAS = [
 
 PALAVRAS_OBRIGATORIAS = [
     "belém",
-    "pará"
+    "belem"
 ]
 
 PALAVRAS_ESTAGIO = [
