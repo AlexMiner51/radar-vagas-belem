@@ -52,6 +52,8 @@ BUSCAS = [
     "site:https://www.superestagios.com.br/index/vagasEstagio.php trainee Belém Pará"
     "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar estágio Belém Pará"
     "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar trainee Belém Pará"
+    "site:https://www.glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm tecnologia"
+    "site:https://www.glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm moda"
     
 ]
 
