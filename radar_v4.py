@@ -126,6 +126,31 @@ def vaga_valida(texto):
 
     return True
 
+PALAVRAS_INTERESSE = [
+    "ti",
+    "t.i",
+    "tecnologia",
+    "informatica",
+    "informática",
+    "computacao",
+    "computação",
+    "ciencia da computacao",
+    "ciência da computação",
+    "sistemas",
+    "sistema",
+    "software",
+    "desenvolvimento",
+    "programacao",
+    "programação",
+    "engenharia de software",
+    "moda",
+    "design de moda",
+    "design",
+    "publicidade",
+    "marketing digital",
+    "ux",
+    "ui"
+]
 
 def buscar_vagas_iel():
 
