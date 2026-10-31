@@ -5,27 +5,59 @@ url = (
     "vitrine-vaga/publicadas?page=1"
 )
 
-try:
+dados = requests.get(
+    url,
+    headers={
+        "User-Agent": "Mozilla/5.0"
+    },
+    timeout=30
+).json()
 
-    resposta = requests.get(
-        url,
-        headers={
-            "User-Agent": "Mozilla/5.0"
-        },
-        timeout=30
+contador = 0
+
+for vaga in dados:
+
+    cidade = str(
+        vaga.get("cidade", "")
     )
 
-    print("STATUS:", resposta.status_code)
-
-    print("TEXTO INICIAL:")
-
-    print(
-        resposta.text[:3000]
+    uf = str(
+        vaga.get("uf", "")
     )
 
-except Exception as erro:
+    if (
+        "bel" in cidade.lower()
+        or "anan" in cidade.lower()
+        or uf == "PA"
+    ):
 
-    print(
-        "ERRO:",
-        erro
-    )
+        contador += 1
+
+        print()
+
+        print(
+            "EMPRESA:",
+            vaga.get("nomeEmpresa")
+        )
+
+        print(
+            "CIDADE:",
+            cidade
+        )
+
+        print(
+            "UF:",
+            uf
+        )
+
+        print(
+            "TIPO:",
+            vaga.get("tipoVaga")
+        )
+
+print()
+
+print(
+    "TOTAL ENCONTRADAS:",
+    contador
+)
