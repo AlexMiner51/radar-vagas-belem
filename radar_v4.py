@@ -166,7 +166,9 @@ PALAVRAS_BLOQUEADAS_IEL = [
     "rh",
     "recursos humanos",
     "logística",
-    "logistica"
+    "logistica",
+    "administração",
+    "administracao"
 ]
 
 def buscar_vagas_iel():
@@ -213,16 +215,16 @@ def buscar_vagas_iel():
                 )
 
                 titulo_normalizado = titulo.lower()
-                    if any(
+
+                if not any(
+                    palavra in titulo_normalizado
+                    for palavra in PALAVRAS_INTERESSE
+                ):
+                    continue
+
+                if any(
                     palavra in titulo_normalizado
                     for palavra in PALAVRAS_BLOQUEADAS_IEL
-                    ):
-                        continue
-
-                
-                if not any(
-                palavra in titulo_normalizado
-                for palavra in PALAVRAS_INTERESSE
                 ):
                     continue
                
