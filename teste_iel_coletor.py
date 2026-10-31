@@ -1,8 +1,22 @@
 import requests
 import re
-import json
 
 URL = "https://carreiras.iel.org.br/PA"
+
+CIDADES_ACEITAS = [
+    "belém",
+    "belem",
+    "ananindeua"
+]
+
+
+def cidade_valida(cidade):
+
+    if not cidade:
+        return False
+
+    return cidade.lower() in CIDADES_ACEITAS
+
 
 html = requests.get(
     URL,
@@ -15,10 +29,9 @@ links = sorted(set(re.findall(
     html
 )))
 
-print("TOTAL DE VAGAS:", len(links))
-print()
+vagas = []
 
-for link in links[:10]:
+for link in links:
 
     try:
 
@@ -38,22 +51,42 @@ for link in links[:10]:
             pagina
         )
 
-        print("=" * 60)
-
-        print(
+        titulo = (
             titulo.group(1)
             if titulo else
-            "SEM TITULO"
+            ""
         )
 
-        print(
+        cidade = (
             cidade.group(1)
             if cidade else
-            "SEM CIDADE"
+            ""
         )
 
-        print(link)
+        if not cidade_valida(cidade):
+            continue
+
+        vagas.append(
+            {
+                "titulo": titulo,
+                "cidade": cidade,
+                "link": link
+            }
+        )
 
     except Exception as erro:
 
         print("ERRO:", erro)
+
+print()
+
+print("TOTAL FILTRADAS:", len(vagas))
+
+print()
+
+for vaga in vagas:
+
+    print("=" * 60)
+    print(vaga["titulo"])
+    print(vaga["cidade"])
+    print(vaga["link"])
