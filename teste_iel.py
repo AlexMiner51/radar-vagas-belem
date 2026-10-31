@@ -1,4 +1,5 @@
 import requests
+import re
 
 url = "https://carreiras.iel.org.br/PA"
 
@@ -12,4 +13,8 @@ resposta = requests.get(
 
 print("STATUS:", resposta.status_code)
 print()
-print(resposta.text[:15000])
+
+apis = re.findall(r'https://[^"\']+', resposta.text)
+
+for api in apis:
+    print(api)
