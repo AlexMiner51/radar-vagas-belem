@@ -1,39 +1,58 @@
 import requests
 
-url = (
-    "https://api.ciee.org.br/vagas/"
-    "vitrine-vaga/publicadas?page=1"
-)
+for pagina in range(1, 21):
 
-dados = requests.get(
-    url,
-    headers={
-        "User-Agent": "Mozilla/5.0"
-    },
-    timeout=30
-).json()
+    url = (
+        "https://api.ciee.org.br/vagas/"
+        f"vitrine-vaga/publicadas?page={pagina}"
+    )
 
-contador = 0
+    dados = requests.get(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0"
+        },
+        timeout=30
+    ).json()
 
-for vaga in dados["content"]:
+    print()
+    print("=" * 50)
+    print("PÁGINA", pagina)
+    print("=" * 50)
 
-    cidade = vaga["local"]["cidade"]
-    uf = vaga["local"]["uf"]
+    encontrou = False
 
-    if uf == "PA":
+    for vaga in dados["content"]:
 
-        contador += 1
+        local = vaga.get("local")
 
-        print()
-        print("EMPRESA:", vaga["nomeEmpresa"])
-        print("CIDADE:", cidade)
-        print("UF:", uf)
-        print("AREA:", vaga["areaProfissional"])
-        print("CODIGO:", vaga["codigoVaga"])
+        if not local:
+            continue
 
-print()
+        uf = local.get(
+            "uf",
+            ""
+        )
 
-print(
-    "TOTAL PARA:",
-    contador
-)
+        cidade = local.get(
+            "cidade",
+            ""
+        )
+
+        if uf == "PA":
+
+            encontrou = True
+
+            print(
+                cidade,
+                "-",
+                vaga.get(
+                    "areaProfissional"
+                )
+            )
+
+    if encontrou:
+
+        print(
+            "\nACHOU VAGA(S) DO PARÁ!"
+        )
