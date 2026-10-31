@@ -2,136 +2,225 @@ import os
 import json
 import requests
 import feedparser
-import re
 from datetime import datetime
 
-CIDADES_ACEITAS = [
-    "belém",
-    "belem",
-    "ananindeua"
+BUSCAS = [
+    "site:gupy.io estágio tecnologia Belém Pará",
+    "site:gupy.io estágio TI Belém Pará",
+    "site:gupy.io estágio ciência da computação Belém Pará",
+    "site:gupy.io estágio sistemas de informação Belém Pará",
+    "site:gupy.io estágio desenvolvimento software Belém Pará",
+
+    "site:linkedin.com/jobs estágio tecnologia Belém Pará",
+    "site:linkedin.com/jobs estágio TI Belém Pará",
+    "site:linkedin.com/jobs estágio computação Belém Pará",
+
+    "site:indeed.com estágio tecnologia Belém Pará",
+    "site:indeed.com estágio TI Belém Pará",
+
+    "site:ciee.org.br estágio Belém Pará",
+    "site:iel-pa.org.br estágio Belém Pará",
+
+    "site:gupy.io estágio moda Belém Pará",
+    "site:gupy.io estágio design de moda Belém Pará",
+
+    "site:linkedin.com/jobs estágio moda Belém Pará",
+    "site:linkedin.com/jobs estágio design de moda Belém Pará"
+
+    "site:sejatrainee.com.br estágio Belém Pará",
+    "site:sejatrainee.com.br tecnologia Belém Pará",
+    "site:sejatrainee.com.br TI Belém Pará",
+    "site:sejatrainee.com.br computação Belém Pará",
+    "site:sejatrainee.com.br moda Belém Pará",
+
+    "site:estagiotrainee.com estágio Belém Pará",
+    "site:estagiotrainee.com tecnologia Belém Pará",
+    "site:estagiotrainee.com TI Belém Pará",
+    "site:estagiotrainee.com computação Belém Pará",
+    "site:estagiotrainee.com moda Belém Pará"
+    "site:https://www.ciadetalentos.com.br/#jobs estágio Belém Pará"
+    "site:https://www.ciadetalentos.com.br/#jobs trainee Belém Pará"
+    "site:https://www.ciadeestagios.com.br/vagas-de-estagio/ estágio Belém Pará"
+    "site:https://www.ciadeestagios.com.br/vagas-de-estagio/ trainee Belém Pará"
+    "site:https://www.nube.com.br/ estágio Belém Pará"
+    "site:https://www.nube.com.br/ trainee Belém Pará"
+    "site:https://portal.ciee.org.br/quero-uma-vaga/ estágio Belém Pará"
+    "site:https://portal.ciee.org.br/quero-uma-vaga/ trainee Belém Pará"
+    "site:https://app.eureca.me/oportunidades estágio Belém Pará"
+    "site:https://app.eureca.me/oportunidades trainee Belém Pará"
+    "site:https://www.superestagios.com.br/index/vagasEstagio.php estágio Belém Pará"
+    "site:https://www.superestagios.com.br/index/vagasEstagio.php trainee Belém Pará"
+    "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar estágio Belém Pará"
+    "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar trainee Belém Pará"
+    "site:https://www.glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm tecnologia"
+    "site:https://www.glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm moda"
+    
 ]
 
-AREAS_INTERESSE = [
-    "ti",
-    "t.i",
-    "tecnologia",
-    "informatica",
-    "informática",
-    "computacao",
-    "computação",
-    "ciencia da computacao",
-    "ciência da computação",
-    "ads",
-    "análise e desenvolvimento de sistemas",
-    "analise e desenvolvimento de sistemas",
-    "sistemas",
-    "sistema",
-    "software",
-    "desenvolvimento",
-    "programacao",
-    "programação",
-    "engenharia de software",
-    "moda",
-    "design",
-    "design de moda",
-    "marketing",
-    "publicidade",
-    "ux",
-    "ui"
+PALAVRAS_OBRIGATORIAS = [
+    "belém",
+    "pará"
+]
+
+PALAVRAS_ESTAGIO = [
+    "estágio",
+    "estagio",
+    "estagiário",
+    "estagiario",
+    "intern"
+]
+
+PALAVRAS_BLOQUEADAS = [
+    "guiné",
+    "guinea",
+    "guiné-bissau",
+    "bissau",
+    "africa",
+    "south africa",
+    "home office",
+    "remoto",
+    "remote",
+    "são paulo",
+    "sao paulo",
+    "rio de janeiro",
+    "curitiba",
+    "porto alegre",
+    "bangkok",
+    "thailand"
 ]
 
 
 def carregar_historico():
 
     try:
-
-        with open(
-            "seen.json",
-            "r",
-            encoding="utf-8"
-        ) as arquivo:
-
-            return set(json.load(arquivo))
-
+        with open("seen.json", "r", encoding="utf-8") as f:
+            return set(json.load(f))
     except:
-
         return set()
 
 
 def salvar_historico(historico):
 
-    with open(
-        "seen.json",
-        "w",
-        encoding="utf-8"
-    ) as arquivo:
-
+    with open("seen.json", "w", encoding="utf-8") as f:
         json.dump(
             list(historico),
-            arquivo,
+            f,
             ensure_ascii=False,
             indent=2
         )
 
 
-def titulo_relevante(titulo):
+def vaga_valida(texto):
 
-    texto = titulo.lower()
+    texto = texto.lower()
 
-    return any(
-        palavra in texto
-        for palavra in AREAS_INTERESSE
-    )
+    if not all(p in texto for p in PALAVRAS_OBRIGATORIAS):
+        return False
+
+    if not any(p in texto for p in PALAVRAS_ESTAGIO):
+        return False
+
+    if any(p in texto for p in PALAVRAS_BLOQUEADAS):
+        return False
+
+    return True
 
 
-def buscar_vagas_iel():
+def buscar_vagas():
 
     vagas = []
 
-    try:
+    historico = carregar_historico()
 
-        resposta = requests.get(
-            "https://carreiras.iel.org.br/PA",
-            headers={
-                "User-Agent": "Mozilla/5.0"
-            },
-            timeout=30
-        )
+    for busca in BUSCAS:
 
-        html = resposta.text
+        try:
 
-        links = sorted(
-            set(
-                re.findall(
-                    r'https://carreiras\.iel\.org\.br/PA/vaga/[^\s"<]+',
-                    html
-                )
+            url = (
+                "https://news.google.com/rss/search?q="
+                + busca.replace(" ", "+")
             )
+
+            feed = feedparser.parse(url)
+
+            for item in feed.entries:
+
+                titulo = item.title.strip()
+                link = item.link.strip()
+
+                texto = f"{titulo} {link}"
+
+                if not vaga_valida(texto):
+                    continue
+
+                if link in historico:
+                    continue
+
+                historico.add(link)
+
+                vagas.append(
+                    {
+                        "titulo": titulo,
+                        "link": link
+                    }
+                )
+
+        except Exception as erro:
+
+            print("Erro:", erro)
+
+    salvar_historico(historico)
+
+    return vagas
+
+
+def enviar_telegram(texto):
+
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+
+    requests.post(
+        url,
+        data={
+            "chat_id": chat_id,
+            "text": texto[:4000]
+        },
+        timeout=30
+    )
+
+
+def main():
+
+    vagas = buscar_vagas()
+
+    cabecalho = (
+        f"📢 Radar de Estágios - Belém/PA\n"
+        f"{datetime.now().strftime('%d/%m/%Y')}\n\n"
+    )
+
+    if not vagas:
+
+        mensagem = (
+            cabecalho
+            + "Nenhuma nova vaga encontrada hoje."
         )
 
-        print("Links encontrados:", len(links))
+    else:
 
-        for link in links:
+        linhas = []
 
-            try:
+        for vaga in vagas[:15]:
 
-                pagina = requests.get(
-                    link,
-                    headers={
-                        "User-Agent": "Mozilla/5.0"
-                    },
-                    timeout=30
-                ).text
+            linhas.append(
+                f"• {vaga['titulo']}\n{vaga['link']}"
+            )
 
-                titulo_match = re.search(
-                    r'"title":"([^"]+)"',
-                    pagina
-                )
+        mensagem = cabecalho + "\n\n".join(linhas)
 
-                cidade_match = re.search(
-                    r'"addressLocality":"([^"]+)"',
-                    pagina
-                )
+    enviar_telegram(mensagem)
 
-                titulo = (
-                 
+
+if __name__ == "__main__":
+    main()
