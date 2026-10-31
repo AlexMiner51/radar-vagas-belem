@@ -25,7 +25,7 @@ BUSCAS = [
     "site:gupy.io estágio design de moda Belém Pará",
 
     "site:linkedin.com/jobs estágio moda Belém Pará",
-    "site:linkedin.com/jobs estágio design de moda Belém Pará"
+    "site:linkedin.com/jobs estágio design de moda Belém Pará",
 
     "site:sejatrainee.com.br estágio Belém Pará",
     "site:sejatrainee.com.br tecnologia Belém Pará",
@@ -37,23 +37,23 @@ BUSCAS = [
     "site:estagiotrainee.com tecnologia Belém Pará",
     "site:estagiotrainee.com TI Belém Pará",
     "site:estagiotrainee.com computação Belém Pará",
-    "site:estagiotrainee.com moda Belém Pará"
-    "site:https://www.ciadetalentos.com.br/#jobs estágio Belém Pará"
-    "site:https://www.ciadetalentos.com.br/#jobs trainee Belém Pará"
-    "site:https://www.ciadeestagios.com.br/vagas-de-estagio/ estágio Belém Pará"
-    "site:https://www.ciadeestagios.com.br/vagas-de-estagio/ trainee Belém Pará"
-    "site:https://www.nube.com.br/ estágio Belém Pará"
-    "site:https://www.nube.com.br/ trainee Belém Pará"
-    "site:https://portal.ciee.org.br/quero-uma-vaga/ estágio Belém Pará"
-    "site:https://portal.ciee.org.br/quero-uma-vaga/ trainee Belém Pará"
-    "site:https://app.eureca.me/oportunidades estágio Belém Pará"
-    "site:https://app.eureca.me/oportunidades trainee Belém Pará"
-    "site:https://www.superestagios.com.br/index/vagasEstagio.php estágio Belém Pará"
-    "site:https://www.superestagios.com.br/index/vagasEstagio.php trainee Belém Pará"
-    "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar estágio Belém Pará"
-    "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar trainee Belém Pará"
-    "site:https://www.glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm tecnologia"
-    "site:https://www.glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm moda"
+    "site:estagiotrainee.com moda Belém Pará",
+    "site:https://www.ciadetalentos.com.br/#jobs estágio Belém Pará",
+    "site:https://www.ciadetalentos.com.br/#jobs trainee Belém Pará",
+    "site:https://www.ciadeestagios.com.br/vagas-de-estagio/ estágio Belém Pará",
+    "site:https://www.ciadeestagios.com.br/vagas-de-estagio/ trainee Belém Pará",
+    "site:https://www.nube.com.br/ estágio Belém Pará",
+    "site:https://www.nube.com.br/ trainee Belém Pará",
+    "site:https://portal.ciee.org.br/quero-uma-vaga/ estágio Belém Pará",
+    "site:https://portal.ciee.org.br/quero-uma-vaga/ trainee Belém Pará",
+    "site:https://app.eureca.me/oportunidades estágio Belém Pará",
+    "site:https://app.eureca.me/oportunidades trainee Belém Pará",
+    "site:https://www.superestagios.com.br/index/vagasEstagio.php estágio Belém Pará",
+    "site:https://www.superestagios.com.br/index/vagasEstagio.php trainee Belém Pará",
+    "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar estágio Belém Pará",
+    "site:https://www.portalabre.com.br/Vagas.do?action=pesquisar trainee Belém Pará",
+    "site:https://www.glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm tecnologia",
+    "site:https://www.glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm moda",
     
 ]
 
