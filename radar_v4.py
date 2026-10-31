@@ -285,6 +285,13 @@ def buscar_vagas():
 
             feed = feedparser.parse(url)
 
+            print(
+                "Busca:",
+                busca,
+                "- resultados:",
+                len(feed.entries)
+            )
+            
             for item in feed.entries:
 
                 titulo = item.title.strip()
