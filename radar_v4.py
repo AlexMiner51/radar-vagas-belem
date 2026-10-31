@@ -381,6 +381,12 @@ def buscar_vagas_ciee():
         len(vagas)
     )
 
+    for vaga in vagas:
+
+        print(
+            vaga["titulo"]
+        )
+    
     return vagas
     
 def buscar_vagas():
