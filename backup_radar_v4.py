@@ -159,6 +159,24 @@ PALAVRAS_INTERESSE = [
     "ui"
 ]
 
+PALAVRAS_BLOQUEADAS_IEL = [
+    "contábeis",
+    "contabeis",
+    "contabilidade",
+    "rh",
+    "recursos humanos",
+    "logística",
+    "logistica",
+    "administração",
+    "administracao",
+    "marketing",
+    "publicidade",
+    "propaganda",
+    "comunicação",
+    "jonalismo",
+    "comunicação social"
+]
+
 def buscar_vagas_iel():
 
     vagas = []
@@ -205,8 +223,14 @@ def buscar_vagas_iel():
                 titulo_normalizado = titulo.lower()
 
                 if not any(
-                palavra in titulo_normalizado
-                for palavra in PALAVRAS_INTERESSE
+                    palavra in titulo_normalizado
+                    for palavra in PALAVRAS_INTERESSE
+                ):
+                    continue
+
+                if any(
+                    palavra in titulo_normalizado
+                    for palavra in PALAVRAS_BLOQUEADAS_IEL
                 ):
                     continue
                
