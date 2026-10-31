@@ -1,7 +1,6 @@
 import requests
-import re
 
-url = "https://carreiras.iel.org.br/PA"
+url = "https://carreiras.iel.org.br/PA/vaga/vagas-destinadas-a-aprendizagem-de-cursos/32679/vaga-de-estagio-para-ti-benevides"
 
 resposta = requests.get(
     url,
@@ -11,10 +10,6 @@ resposta = requests.get(
     timeout=30
 )
 
-links = re.findall(
-    r'https://carreiras\.iel\.org\.br/PA/vaga/[^\s"<]+',
-    resposta.text
-)
-
-for link in sorted(set(links)):
-    print(link)
+print("STATUS:", resposta.status_code)
+print()
+print(resposta.text[:20000])
