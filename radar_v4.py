@@ -208,7 +208,7 @@ def buscar_vagas_iel():
                 palavra in titulo_normalizado
                 for palavra in PALAVRAS_INTERESSE
                 ):
-                continue
+                    continue
                
                 cidade = (
                     cidade.group(1)
