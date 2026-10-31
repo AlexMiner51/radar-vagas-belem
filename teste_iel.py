@@ -11,10 +11,10 @@ resposta = requests.get(
     timeout=30
 )
 
-print("STATUS:", resposta.status_code)
-print()
+links = re.findall(
+    r'https://carreiras\.iel\.org\.br/PA/vaga/[^\s"<]+',
+    resposta.text
+)
 
-apis = re.findall(r'https://[^"\']+', resposta.text)
-
-for api in apis:
-    print(api)
+for link in sorted(set(links)):
+    print(link)
