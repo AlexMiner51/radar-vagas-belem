@@ -1,9 +1,9 @@
 import requests
-import json
 
 url = (
-    "https://api.ciee.org.br/core/city/search"
-    "?filter=belem"
+    "https://api.ciee.org.br/vagas/"
+    "vitrine-vaga/publicadas"
+    "?cityCode=1501402"
 )
 
 resposta = requests.get(
@@ -16,20 +16,6 @@ resposta = requests.get(
 
 print("STATUS:", resposta.status_code)
 
-try:
+print()
 
-    dados = resposta.json()
-
-    print(
-        json.dumps(
-            dados,
-            ensure_ascii=False,
-            indent=2
-        )[:5000]
-    )
-
-except Exception:
-
-    print(
-        resposta.text[:5000]
-    )
+print(resposta.text[:3000])
