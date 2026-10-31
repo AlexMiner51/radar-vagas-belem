@@ -1,7 +1,6 @@
 import requests
-import re
 
-url = "https://portal.ciee.org.br/quero-uma-vaga/"
+url = "https://portal.ciee.org.br/quero-uma-vaga/estagio/"
 
 resposta = requests.get(
     url,
@@ -11,23 +10,49 @@ resposta = requests.get(
     timeout=30
 )
 
-html = resposta.text
+html = resposta.text.lower()
 
-links = re.findall(
-    r'href="([^"]+)"',
-    html
-)
+print("STATUS:", resposta.status_code)
+print("TAMANHO:", len(html))
 
-print("TOTAL LINKS:", len(links))
+print("CONTÉM ESTAGIO:", "estagio" in html)
+print("CONTÉM VAGA:", "vaga" in html)
+print("CONTÉM BELÉM:", "belém" in html)
+print("CONTÉM BELEM:", "belem" in html)
+print("CONTÉM PARÁ:", "pará" in html)
+print("CONTÉM PARA:", "para" in html)
 
-for link in links:
+# Procurar alguns trechos relevantes
 
-    link = link.lower()
+palavras = [
+    "belém",
+    "belem",
+    "pará",
+    "para",
+    "estagio",
+    "vaga"
+]
 
-    if (
-        "vaga" in link
-        or "estagio" in link
-        or "estágio" in link
-        or "aprendiz" in link
-    ):
-        print(link)
+for palavra in palavras:
+
+    print()
+    print("====", palavra.upper(), "====")
+
+    posicao = html.find(palavra)
+
+    if posicao != -1:
+
+        inicio = max(0, posicao - 100)
+
+        fim = min(
+            len(html),
+            posicao + 300
+        )
+
+        print(
+            html[inicio:fim]
+        )
+
+    else:
+
+        print("NÃO ENCONTRADO")
