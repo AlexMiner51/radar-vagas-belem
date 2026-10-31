@@ -126,7 +126,80 @@ def vaga_valida(texto):
 
     return True
 
+def buscar_vagas_iel():
 
+    vagas = []
+
+    try:
+
+        html = requests.get(
+            "https://carreiras.iel.org.br/PA",
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=30
+        ).text
+
+        links = sorted(set(re.findall(
+            r'https://carreiras\.iel\.org\.br/PA/vaga/[^\s"<]+',
+            html
+        )))
+
+        for link in links:
+
+            try:
+
+                pagina = requests.get(
+                    link,
+                    headers={"User-Agent": "Mozilla/5.0"},
+                    timeout=30
+                ).text
+
+                titulo = re.search(
+                    r'"title":"([^"]+)"',
+                    pagina
+                )
+
+                cidade = re.search(
+                    r'"addressLocality":"([^"]+)"',
+                    pagina
+                )
+
+                titulo = (
+                    titulo.group(1)
+                    if titulo else
+                    ""
+                )
+
+                cidade = (
+                    cidade.group(1)
+                    if cidade else
+                    ""
+                )
+
+                cidade_normalizada = cidade.lower()
+
+                if cidade_normalizada not in [
+                    "belém",
+                    "belem",
+                    "ananindeua"
+                ]:
+                    continue
+
+                vagas.append(
+                    {
+                        "titulo": f"[IEL] {titulo}",
+                        "link": link
+                    }
+                )
+
+            except:
+                pass
+
+    except Exception as erro:
+
+        print("Erro IEL:", erro)
+
+    return vagas
+    
 def buscar_vagas():
 
     vagas = []
