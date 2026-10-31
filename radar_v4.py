@@ -310,6 +310,12 @@ def buscar_vagas():
 
     salvar_historico(historico)
 
+    print(
+        "Google encontrou",
+        len(vagas),
+        "vagas"
+)
+    
     return vagas
 
 
