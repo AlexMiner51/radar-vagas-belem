@@ -126,6 +126,39 @@ def vaga_valida(texto):
 
     return True
 
+PALAVRAS_INTERESSE = [
+    "ti",
+    "t.i",
+    "tecnologia",
+    "informatica",
+    "informática",
+    "computacao",
+    "computação",
+    "ciência",
+    "ciencia",
+    "ciência de dados",
+    "dados",
+    "ciencia da computacao",
+    "ciência da computação",
+    "sistemas",
+    "sistema",
+    "software",
+    "desenvolvimento",
+    "programacao",
+    "programação",
+    "engenharia de software",
+    "ads",
+    "análise e desenvolvimento de sistemas",
+    "analise e desenvolvimento de sistemas",
+    "moda",
+    "design",
+    "design de moda",
+    "marketing",
+    "publicidade",
+    "ux",
+    "ui"
+]
+
 def buscar_vagas_iel():
 
     vagas = []
@@ -169,6 +202,14 @@ def buscar_vagas_iel():
                     ""
                 )
 
+                titulo_normalizado = titulo.lower()
+
+                if not any(
+                palavra in titulo_normalizado
+                for palavra in PALAVRAS_INTERESSE
+                ):
+                    continue
+               
                 cidade = (
                     cidade.group(1)
                     if cidade else
