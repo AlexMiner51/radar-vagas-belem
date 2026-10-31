@@ -168,7 +168,13 @@ PALAVRAS_BLOQUEADAS_IEL = [
     "logística",
     "logistica",
     "administração",
-    "administracao"
+    "administracao",
+    "marketing",
+    "publicidade",
+    "propaganda",
+    "comunicação",
+    "jonalismo",
+    "comunicação social"
 ]
 
 def buscar_vagas_iel():
