@@ -1,21 +1,49 @@
 import requests
 
-url = (
-    "https://api.ciee.org.br/vagas/"
-    "vitrine-vaga/publicadas"
-    "?cityCode=1501402"
-)
+for pagina in range(1, 51):
 
-resposta = requests.get(
-    url,
-    headers={
-        "User-Agent": "Mozilla/5.0"
-    },
-    timeout=30
-)
+    url = (
+        "https://api.ciee.org.br/vagas/"
+        f"vitrine-vaga/publicadas?page={pagina}"
+    )
 
-print("STATUS:", resposta.status_code)
+    dados = requests.get(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0"
+        },
+        timeout=30
+    ).json()
 
-print()
+    for vaga in dados["content"]:
 
-print(resposta.text[:3000])
+        local = vaga.get("local")
+
+        if not local:
+            continue
+
+        cidade = str(
+            local.get("cidade", "")
+        ).lower()
+
+        if (
+            "belém" in cidade
+            or "belem" in cidade
+            or "ananindeua" in cidade
+        ):
+
+            print()
+            print("PÁGINA:", pagina)
+            print("CIDADE:", cidade)
+            print(
+                "ÁREA:",
+                vaga.get(
+                    "areaProfissional"
+                )
+            )
+            print(
+                "EMPRESA:",
+                vaga.get(
+                    "nomeEmpresa"
+                )
+            )
