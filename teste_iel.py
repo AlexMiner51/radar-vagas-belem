@@ -1,31 +1,21 @@
 import requests
-import re
-
-url = "https://carreiras.iel.org.br/PA/vaga/vagas-destinadas-a-aprendizagem-de-cursos/32679/vaga-de-estagio-para-ti-benevides"
 
 html = requests.get(
-    url,
+    "https://carreiras.iel.org.br/PA",
     headers={"User-Agent": "Mozilla/5.0"},
     timeout=30
 ).text
 
-campos = [
-    "addressLocality",
-    "addressRegion",
-    "datePosted",
-    "title",
-    "description",
-]
+for linha in html.splitlines():
 
-for campo in campos:
+    if "belem" in linha.lower():
+        print(linha)
 
-    encontrados = re.findall(
-        rf'"{campo}":"(.*?)"',
-        html
-    )
+    if "belém" in linha.lower():
+        print(linha)
 
-    print()
-    print("CAMPO:", campo)
+    if "belem-pa" in linha.lower():
+        print(linha)
 
-    for item in encontrados:
-        print(item)
+    if "belem-pa" in linha.lower():
+        print(linha)
