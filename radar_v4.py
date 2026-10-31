@@ -267,8 +267,12 @@ def enviar_telegram(texto):
 
 def main():
 
-    vagas = buscar_vagas()
+    vagas_google = buscar_vagas()
 
+    vagas_iel = buscar_vagas_iel()
+
+    vagas = vagas_google + vagas_iel
+    
     cabecalho = (
         f"📢 Radar de Estágios - Belém/PA\n"
         f"{datetime.now().strftime('%d/%m/%Y')}\n\n"
