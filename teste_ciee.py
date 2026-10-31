@@ -1,22 +1,31 @@
 import requests
-import re
 
-url = "https://portal.ciee.org.br/quero-uma-vaga/estagio/"
-
-html = requests.get(
-    url,
-    headers={
-        "User-Agent": "Mozilla/5.0"
-    },
-    timeout=30
-).text
-
-apis = re.findall(
-    r'https://[^"\']+',
-    html
+url = (
+    "https://api.ciee.org.br/vagas/"
+    "vitrine-vaga/publicadas?page=1"
 )
 
-print("TOTAL APIS:", len(apis))
+try:
 
-for item in sorted(set(apis)):
-    print(item)
+    resposta = requests.get(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0"
+        },
+        timeout=30
+    )
+
+    print("STATUS:", resposta.status_code)
+
+    print("TEXTO INICIAL:")
+
+    print(
+        resposta.text[:3000]
+    )
+
+except Exception as erro:
+
+    print(
+        "ERRO:",
+        erro
+    )
