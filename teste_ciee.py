@@ -1,4 +1,5 @@
 import requests
+import re
 
 url = "https://portal.ciee.org.br/quero-uma-vaga/"
 
@@ -10,28 +11,23 @@ resposta = requests.get(
     timeout=30
 )
 
-print("STATUS:", resposta.status_code)
+html = resposta.text
 
-print("TAMANHO:", len(resposta.text))
-
-texto = resposta.text.lower()
-
-print(
-    "CONTÉM 'estagio'?:",
-    "estagio" in texto
+links = re.findall(
+    r'href="([^"]+)"',
+    html
 )
 
-print(
-    "CONTÉM 'vaga'?:",
-    "vaga" in texto
-)
+print("TOTAL LINKS:", len(links))
 
-print(
-    "CONTÉM 'belém'?:",
-    "belém" in texto
-)
+for link in links:
 
-print(
-    "CONTÉM 'belem'?:",
-    "belem" in texto
-)
+    link = link.lower()
+
+    if (
+        "vaga" in link
+        or "estagio" in link
+        or "estágio" in link
+        or "aprendiz" in link
+    ):
+        print(link)
