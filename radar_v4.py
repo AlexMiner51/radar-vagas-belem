@@ -159,6 +159,16 @@ PALAVRAS_INTERESSE = [
     "ui"
 ]
 
+PALAVRAS_BLOQUEADAS_IEL = [
+    "contábeis",
+    "contabeis",
+    "contabilidade",
+    "rh",
+    "recursos humanos",
+    "logística",
+    "logistica"
+]
+
 def buscar_vagas_iel():
 
     vagas = []
