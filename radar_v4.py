@@ -118,7 +118,7 @@ def vaga_valida(texto):
 
     texto = texto.lower()
 
-    if not all(p in texto for p in PALAVRAS_OBRIGATORIAS):
+    if not any(p in texto for p in PALAVRAS_OBRIGATORIAS):
         return False
 
     if not any(p in texto for p in PALAVRAS_ESTAGIO):
