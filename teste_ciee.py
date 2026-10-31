@@ -1,4 +1,5 @@
 import requests
+import json
 
 url = (
     "https://api.ciee.org.br/vagas/"
@@ -13,51 +14,24 @@ dados = requests.get(
     timeout=30
 ).json()
 
-contador = 0
+print(type(dados))
 
-for vaga in dados:
+print()
 
-    cidade = str(
-        vaga.get("cidade", "")
-    )
+print("CHAVES:")
 
-    uf = str(
-        vaga.get("uf", "")
-    )
+if isinstance(dados, dict):
 
-    if (
-        "bel" in cidade.lower()
-        or "anan" in cidade.lower()
-        or uf == "PA"
-    ):
+    for chave in dados.keys():
 
-        contador += 1
-
-        print()
-
-        print(
-            "EMPRESA:",
-            vaga.get("nomeEmpresa")
-        )
-
-        print(
-            "CIDADE:",
-            cidade
-        )
-
-        print(
-            "UF:",
-            uf
-        )
-
-        print(
-            "TIPO:",
-            vaga.get("tipoVaga")
-        )
+        print(chave)
 
 print()
 
 print(
-    "TOTAL ENCONTRADAS:",
-    contador
+    json.dumps(
+        dados,
+        ensure_ascii=False,
+        indent=2
+    )[:3000]
 )
