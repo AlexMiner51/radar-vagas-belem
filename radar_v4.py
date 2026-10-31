@@ -60,7 +60,10 @@ BUSCAS = [
 
 PALAVRAS_OBRIGATORIAS = [
     "belém",
-    "belem"
+    "belem",
+    "ananindeua",
+    "para",
+    "pará"
 ]
 
 PALAVRAS_ESTAGIO = [
