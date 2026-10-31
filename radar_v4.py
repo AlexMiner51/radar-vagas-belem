@@ -202,6 +202,14 @@ def buscar_vagas_iel():
                     ""
                 )
 
+                titulo_normalizado = titulo.lower()
+
+                if not any(
+                palavra in titulo_normalizado
+                for palavra in PALAVRAS_INTERESSE
+                ):
+                continue
+               
                 cidade = (
                     cidade.group(1)
                     if cidade else
