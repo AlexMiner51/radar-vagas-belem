@@ -1,21 +1,27 @@
 import requests
+import re
 
 url = "https://portal.ciee.org.br/"
 
-try:
+resposta = requests.get(
+    url,
+    headers={
+        "User-Agent": "Mozilla/5.0"
+    },
+    timeout=30
+)
 
-    resposta = requests.get(
-        url,
-        headers={
-            "User-Agent": "Mozilla/5.0"
-        },
-        timeout=30
-    )
+html = resposta.text
 
-    print("STATUS:", resposta.status_code)
+print("STATUS:", resposta.status_code)
+print("TAMANHO:", len(html))
 
-    print("TAMANHO:", len(resposta.text))
+links = re.findall(
+    r'href="([^"]+)"',
+    html
+)
 
-except Exception as erro:
+print("QUANTIDADE DE LINKS:", len(links))
 
-    print("ERRO:", erro)
+for link in links[:50]:
+    print(link)
