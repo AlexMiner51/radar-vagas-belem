@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import feedparser
+import re
 from datetime import datetime
 
 BUSCAS = [
