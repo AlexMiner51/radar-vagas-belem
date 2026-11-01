@@ -483,7 +483,7 @@ def main():
     vagas_fashionjobs = (
         buscar_vagas_fashionjobs()
     )
-        vagas = (
+    vagas = (
         vagas_google
         + vagas_iel
         + vagas_ciee
