@@ -1,6 +1,9 @@
 import requests
 
-url = "https://br.fashionjobs.com"
+url = (
+    "https://br.fashionjobs.com/"
+    "city/bel%25c3%25a9m.html"
+)
 
 headers = {
     "User-Agent": (
@@ -11,48 +14,35 @@ headers = {
         "Chrome/130.0.0.0 "
         "Safari/537.36"
     ),
-    "Accept": "text/html",
     "Accept-Language": "pt-BR,pt;q=0.9"
 }
 
-html = requests.get(
+resposta = requests.get(
     url,
     headers=headers,
     timeout=30
-).text.lower()
+)
 
-palavras = [
-    "emprego",
-    "vaga",
-    "vagas",
-    "job",
-    "jobs",
-    "fashionjobs",
-    "belém",
-    "belem"
-]
+print("STATUS:", resposta.status_code)
 
-for palavra in palavras:
+print(
+    "TAMANHO:",
+    len(resposta.text)
+)
 
-    print()
-    print("=" * 50)
-    print("PALAVRA:", palavra)
+html = resposta.text.lower()
 
-    pos = html.find(palavra)
+for palavra in [
+    "estagio",
+    "estágio",
+    "moda",
+    "design",
+    "marketing",
+    "belém"
+]:
 
-    if pos == -1:
-
-        print("NÃO ENCONTRADA")
-
-    else:
-
-        inicio = max(0, pos - 200)
-
-        fim = min(
-            len(html),
-            pos + 500
-        )
-
-        print(
-            html[inicio:fim]
-        )
+    print(
+        palavra,
+        ":",
+        palavra in html
+    )
