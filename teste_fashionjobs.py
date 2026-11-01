@@ -1,4 +1,5 @@
 import requests
+import re
 
 url = "https://br.fashionjobs.com"
 
@@ -15,19 +16,19 @@ headers = {
     "Accept-Language": "pt-BR,pt;q=0.9"
 }
 
-resposta = requests.get(
+html = requests.get(
     url,
     headers=headers,
     timeout=30
+).text
+
+links = re.findall(
+    r'href="([^"]+)"',
+    html
 )
 
-print("STATUS:", resposta.status_code)
+print("TOTAL LINKS:", len(links))
 
-print(
-    "TAMANHO:",
-    len(resposta.text)
-)
+for link in links[:100]:
 
-print(
-    resposta.text[:1000]
-)
+    print(link)
