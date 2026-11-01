@@ -1,5 +1,3 @@
-# teste_fashionjobs.py
-
 import requests
 
 url = "https://br.fashionjobs.com"
