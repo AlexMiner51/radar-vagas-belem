@@ -24,16 +24,8 @@ html = requests.get(
     timeout=30
 ).text
 
-links = re.findall(
-    r'https://br\.fashionjobs\.com/trabalho/[^"]+',
-    html
-)
+for linha in html.splitlines():
 
-print(
-    "TOTAL VAGAS:",
-    len(set(links))
-)
+    if "/trabalho/" in linha:
 
-for vaga in sorted(set(links)):
-
-    print(vaga)
+        print(linha[:500])
