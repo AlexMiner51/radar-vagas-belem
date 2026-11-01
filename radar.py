@@ -1,8 +1,10 @@
+import os
 import json
 import requests
 import feedparser
 import re
 from datetime import datetime
+from fashionjobs import buscar_vagas_fashionjobs
 
 BUSCAS = [
     "site:gupy.io estágio tecnologia Belém Pará",
@@ -13,7 +15,7 @@ BUSCAS = [
 
     "site:linkedin.com/jobs estágio tecnologia Belém Pará",
     "site:linkedin.com/jobs estágio TI Belém Pará",
-    "site:linkedin.com/jobs estágio de programação Belém Pará",
+    "site:linkedin.com/jobs estágio computação Belém Pará",
 
     "site:indeed.com estágio tecnologia Belém Pará",
     "site:indeed.com estágio TI Belém Pará",
@@ -39,19 +41,19 @@ BUSCAS = [
     "site:estagiotrainee.com computação Belém Pará",
     "site:estagiotrainee.com moda Belém Pará"
     "site:ciadetalentos.com.br/#jobs estágio Belém Pará",
-    "site:ciadetalentos.com.br/#jobs estagiário Belém Pará",
+    "site:ciadetalentos.com.br/#jobs trainee Belém Pará",
     "site:ciadeestagios.com.br/vagas-de-estagio/ estágio Belém Pará",
-    "site:ciadeestagios.com.br/vagas-de-estagio/ estagiário Belém Pará",
+    "site:ciadeestagios.com.br/vagas-de-estagio/ trainee Belém Pará",
     "site:nube.com.br/ estágio Belém Pará",
     "site:nube.com.br/ trainee Belém Pará",
     "site:portal.ciee.org.br/quero-uma-vaga/ estágio Belém Pará",
-    "site:portal.ciee.org.br/quero-uma-vaga/ estagiário Belém Pará",
+    "site:portal.ciee.org.br/quero-uma-vaga/ trainee Belém Pará",
     "site:app.eureca.me/oportunidades estágio Belém Pará",
-    "site:app.eureca.me/oportunidades estagiário Belém Pará",
+    "site:app.eureca.me/oportunidades trainee Belém Pará",
     "site:superestagios.com.br/index/vagasEstagio.php estágio Belém Pará",
-    "site:superestagios.com.br/index/vagasEstagio.php estagiário Belém Pará",
+    "site:superestagios.com.br/index/vagasEstagio.php trainee Belém Pará",
     "site:portalabre.com.br/Vagas.do?action=pesquisar estágio Belém Pará",
-    "site:portalabre.com.br/Vagas.do?action=pesquisar estagiário Belém Pará",
+    "site:portalabre.com.br/Vagas.do?action=pesquisar trainee Belém Pará",
     "site:glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm tecnologia",
     "site:glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm moda",
     
@@ -59,41 +61,41 @@ BUSCAS = [
 
 PALAVRAS_OBRIGATORIAS = [
     "belém",
-    "belém",
+    "belem",
     "ananindeua",
-    "pára",
-    "pára"
+    "para",
+    "pará"
 ]
 
 PALAVRAS_ESTAGIO = [
     "estágio",
-    "estágio",
+    "estagio",
     "estagiário",
     "estagiario",
-    "estagiário"
+    "intern"
 ]
 
 PALAVRAS_BLOQUEADAS = [
     "guiné",
-    "guiné",
+    "guinea",
     "guiné-bissau",
     "bissau",
-    "África",
-    "África do Sul",
-    "escritório em casa",
+    "africa",
+    "south africa",
+    "home office",
     "remoto",
-    "remoto",
-    "São Paulo",
-    "São Paulo",
+    "remote",
+    "são paulo",
+    "sao paulo",
     "rio de janeiro",
     "curitiba",
     "porto alegre",
-    "Bangkok",
-    "Tailândia"
+    "bangkok",
+    "thailand"
 ]
 
 
-def carregar_histórico():
+def carregar_historico():
 
     try:
         with open("seen.json", "r", encoding="utf-8") as f:
@@ -102,14 +104,14 @@ def carregar_histórico():
         return set()
 
 
-def salvar_histórico(histórico):
+def salvar_historico(historico):
 
     with open("seen.json", "w", encoding="utf-8") as f:
         json.dump(
-            lista(histórico),
+            list(historico),
             f,
-            garantir_ascii=False,
-            recuo=2
+            ensure_ascii=False,
+            indent=2
         )
 
 
@@ -117,48 +119,48 @@ def vaga_valida(texto):
 
     texto = texto.lower()
 
-    if any(p em texto para p em PALAVRAS_OBRIGATORIAS):
+    if not any(p in texto for p in PALAVRAS_OBRIGATORIAS):
         return False
 
-    if not any(p em texto para p em PALAVRAS_ESTAGIO):
+    if not any(p in texto for p in PALAVRAS_ESTAGIO):
         return False
 
-    if any(p em texto para p em PALAVRAS_BLOQUEADAS):
+    if any(p in texto for p in PALAVRAS_BLOQUEADAS):
         return False
 
     return True
 
 PALAVRAS_INTERESSE = [
     "ti",
-    "ti",
+    "t.i",
     "tecnologia",
+    "informatica",
     "informática",
-    "informática",
-    "computação",
+    "computacao",
     "computação",
     "ciência",
-    "ciência",
+    "ciencia",
     "ciência de dados",
     "dados",
-    "ciência da computação",
+    "ciencia da computacao",
     "ciência da computação",
     "sistemas",
     "sistema",
     "software",
     "desenvolvimento",
-    "programação",
+    "programacao",
     "programação",
     "engenharia de software",
-    "anúncios",
+    "ads",
     "análise e desenvolvimento de sistemas",
-    "analisar e desenvolver sistemas",
+    "analise e desenvolvimento de sistemas",
     "moda",
-    "projeto",
+    "design",
     "design de moda",
     "marketing",
     "publicidade",
     "ux",
-    "interface do usuário"
+    "ui"
 ]
 
 PALAVRAS_BLOQUEADAS_IEL = [
@@ -168,9 +170,9 @@ PALAVRAS_BLOQUEADAS_IEL = [
     "rh",
     "recursos humanos",
     "logística",
-    "logística",
+    "logistica",
     "administração",
-    "administração",
+    "administracao",
     "marketing",
     "publicidade",
     "propaganda",
@@ -181,117 +183,117 @@ PALAVRAS_BLOQUEADAS_IEL = [
 
 def buscar_vagas_iel():
 
-    = []
+    vagas = []
 
     try:
 
-        html = solicitações.get(
+        html = requests.get(
             "https://carreiras.iel.org.br/PA",
             headers={"User-Agent": "Mozilla/5.0"},
-            tempo limite=30
-        ).texto
+            timeout=30
+        ).text
 
         links = sorted(set(re.findall(
             r'https://carreiras\.iel\.org\.br/PA/vaga/[^\s"<]+',
             html
         )))
 
-        for link em links:
+        for link in links:
 
             try:
 
                 pagina = requests.get(
                     link,
                     headers={"User-Agent": "Mozilla/5.0"},
-                    tempo limite=30
-                ).texto
+                    timeout=30
+                ).text
 
-                título = re.pesquisa(
-                    r'"título":"([^"]+)"',
-                    página
+                titulo = re.search(
+                    r'"title":"([^"]+)"',
+                    pagina
                 )
 
-                cidade = re.pesquisa(
+                cidade = re.search(
                     r'"addressLocality":"([^"]+)"',
-                    página
+                    pagina
                 )
 
-                título = (
-                    titulo.grupo(1)
-                    se titulo senão
+                titulo = (
+                    titulo.group(1)
+                    if titulo else
                     ""
                 )
 
                 titulo_normalizado = titulo.lower()
 
-                se não houver nenhum(
-                    palavra em titulo_normalizado
-                    para palavra em PALAVRAS_INTERESSE
+                if not any(
+                    palavra in titulo_normalizado
+                    for palavra in PALAVRAS_INTERESSE
                 ):
-                    continuar
+                    continue
 
-                se houver(
-                    palavra em titulo_normalizado
-                    para palavra em PALAVRAS_BLOQUEADAS_IEL
+                if any(
+                    palavra in titulo_normalizado
+                    for palavra in PALAVRAS_BLOQUEADAS_IEL
                 ):
-                    continuar
+                    continue
                
                 cidade = (
-                    cidade.grupo(1)
-                    se cidade senão
+                    cidade.group(1)
+                    if cidade else
                     ""
                 )
 
                 cidade_normalizada = cidade.lower()
 
-                se cidade_normalizada não estiver em [
+                if cidade_normalizada not in [
                     "belém",
-                    "belém",
+                    "belem",
                     "ananindeua"
                 ]:
-                    continuar
+                    continue
 
                 vagas.append(
                     {
-                        "título": f"[IEL] {título}",
+                        "titulo": f"[IEL] {titulo}",
                         "link": link
                     }
                 )
 
-            exceto:
-                passar
+            except:
+                pass
 
-    exceto Exception como erro:
+    except Exception as erro:
 
         print("Erro IEL:", erro)
 
-    retorno
+    return vagas
 
 def buscar_vagas_ciee():
 
-    = []
+    vagas = []
 
-    tentar:
+    try:
 
-        para página em range(1, 51):
+        for pagina in range(1, 51):
 
             url = (
                 "https://api.ciee.org.br/vagas/"
-                f"vitrine-vaga/publicadas?page={página}"
+                f"vitrine-vaga/publicadas?page={pagina}"
             )
 
             resposta = requests.get(
-                URL,
-                cabeçalhos={
+                url,
+                headers={
                     "User-Agent": "Mozilla/5.0"
                 },
-                tempo limite=30
+                timeout=30
             )
 
             dados = resposta.json()
 
-            para vaga em dados.get(
-                "contente",
+            for vaga in dados.get(
+                "content",
                 []
             ):
 
@@ -299,60 +301,60 @@ def buscar_vagas_ciee():
                     "local"
                 )
 
-                se não for local:
-                    continuar
+                if not local:
+                    continue
 
                 cidade = str(
                     local.get(
-                        "†",
+                        "cidade",
                         ""
                     )
-                ).mais baixo()
+                ).lower()
 
-                se cidade não estiver em [
+                if cidade not in [
                     "belém",
-                    "belém",
+                    "belem",
                     "ananindeua"
                 ]:
-                    continuar
+                    continue
 
-                área = str(
-                    vaga.obter(
-                        "áreaProfissional",
+                area = str(
+                    vaga.get(
+                        "areaProfissional",
                         ""
                     )
                 )
                 area_normalizada = area.lower()       
                 
-                se area_normalizada em [
+                if area_normalizada in [
                     "administrativa",
                     "contabilidade",
                     "campo do direito",
                     "recursos humanos"
                 ]:
-                    continuar
-                descrição = str(
-                    vaga.obter(
+                    continue
+                descricao = str(
+                    vaga.get(
                         "descricao",
                         ""
                     )
                 )
 
-                texto = área.lower()
+                texto = area.lower()
 
-                se houver(
-                    palavra em texto
-                    para palavra em PALAVRAS_BLOQUEADAS_IEL
+                if any(
+                    palavra in texto
+                    for palavra in PALAVRAS_BLOQUEADAS_IEL
                 ):
-                    continuar
+                    continue
 
-                se não houver nenhum(
-                    palavra em texto
-                    para palavra em PALAVRAS_INTERESSE
+                if not any(
+                    palavra in texto
+                    for palavra in PALAVRAS_INTERESSE
                 ):
-                    continuar
+                    continue
 
-                código = vaga.get(
+                codigo = vaga.get(
                     "codigoVaga"
                 )
 
@@ -363,8 +365,8 @@ def buscar_vagas_ciee():
 
                 vagas.append(
                     {
-                        "título":
-                            f"[CIEE] {área} - {empresa}",
+                        "titulo":
+                            f"[CIEE] {area} - {empresa}",
                         "link":
                             (
                                 f"https://web.ciee.org.br/login?codigoVaga={codigo}"
@@ -372,35 +374,35 @@ def buscar_vagas_ciee():
                     }
                 )
 
-    exceto Exception como erro:
+    except Exception as erro:
 
-        imprimir(
+        print(
             "Erro CIEE:",
             erro
         )
 
-    imprimir(
+    print(
         "Vagas CIEE:",
         len(vagas)
     )
 
-    para vaga em amigo:
+    for vaga in vagas:
 
-        imprimir(
-            vaga["título"]
+        print(
+            vaga["titulo"]
         )
     
-    retorno
+    return vagas
     
 def buscar_vagas():
 
-    = []
+    vagas = []
 
-    histórico = carregar_histórico()
+    historico = carregar_historico()
 
-    para busca em BUSCAS:
+    for busca in BUSCAS:
 
-        tentar:
+        try:
 
             url = (
                 "https://news.google.com/rss/search?q="
@@ -409,48 +411,48 @@ def buscar_vagas():
 
             feed = feedparser.parse(url)
 
-            imprimir(
+            print(
                 "Busca:",
                 busca,
                 "- resultados:",
                 len(feed.entries)
             )
             
-            para item em feed.entries:
+            for item in feed.entries:
 
-                título = item.title.strip()
+                titulo = item.title.strip()
                 link = item.link.strip()
 
                 texto = f"{titulo} {link}"
 
-                se não vaga_valida(texto):
-                    continuar
+                if not vaga_valida(texto):
+                    continue
 
-                se link em histórico:
-                    continuar
+                if link in historico:
+                    continue
 
-                histórico.adicionar(link)
+                historico.add(link)
 
                 vagas.append(
                     {
-                        "título": título,
+                        "titulo": titulo,
                         "link": link
                     }
                 )
 
-        exceto Exception como erro:
+        except Exception as erro:
 
             print("Erro:", erro)
 
-    salvar_histórico(histórico)
+    salvar_historico(historico)
 
-    imprimir(
+    print(
         "Google encontrou",
         len(vagas),
         "vagas"
 )
     
-    retorno
+    return vagas
 
 
 def enviar_telegram(texto):
@@ -460,47 +462,51 @@ def enviar_telegram(texto):
 
     url = f"https://api.telegram.org/bot{token}/sendMessage"
 
-    solicitações.post(
-        URL,
-        dados={
+    requests.post(
+        url,
+        data={
             "chat_id": chat_id,
-            "texto": texto[:4000]
+            "text": texto[:4000]
         },
-        tempo limite=30
+        timeout=30
     )
 
 
 def main():
 
-    jo_google = buscar_vagas()
+    vagas_google = buscar_vagas()
 
     vagas_iel = buscar_vagas_iel()
 
     vagas_ciee = buscar_vagas_ciee()
 
-    = (
-        joão_google
-        +seu_iel
-        +sociedade_da_sociedade
+    vagas_fashionjobs = (
+        buscar_vagas_fashionjobs()
+    )
+    vagas = (
+        vagas_google
+        + vagas_iel
+        + vagas_ciee
+        + vagas_fashionjobs
     )
     
-    cabecallho = (
+    cabecalho = (
         f"📢 Radar de Estágios - Belém/PA\n"
         f"{datetime.now().strftime('%d/%m/%Y')}\n\n"
     )
 
-    se não for um:
+    if not vagas:
 
         mensagem = (
             cabecalho
             + "Nenhuma nova vaga encontrada hoje."
         )
 
-    outro:
+    else:
 
         linhas = []
 
-        para vaga em mercado[:15]:
+        for vaga in vagas[:15]:
 
             linhas.append(
                 f"• {vaga['titulo']}\n{vaga['link']}"
@@ -511,5 +517,5 @@ def main():
     enviar_telegram(mensagem)
 
 
-se __name__ == "__main__":
-    principal()
+if __name__ == "__main__":
+    main()
