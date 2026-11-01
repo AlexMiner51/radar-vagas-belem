@@ -1,4 +1,5 @@
 import requests
+import re
 
 url = (
     "https://br.fashionjobs.com/"
@@ -17,32 +18,29 @@ headers = {
     "Accept-Language": "pt-BR,pt;q=0.9"
 }
 
-resposta = requests.get(
+html = requests.get(
     url,
     headers=headers,
     timeout=30
+).text
+
+links = re.findall(
+    r'href="([^"]+)"',
+    html
 )
 
-print("STATUS:", resposta.status_code)
+print("TOTAL LINKS:", len(links))
 
-print(
-    "TAMANHO:",
-    len(resposta.text)
-)
+for link in links:
 
-html = resposta.text.lower()
+    link_lower = link.lower()
 
-for palavra in [
-    "estagio",
-    "estágio",
-    "moda",
-    "design",
-    "marketing",
-    "belém"
-]:
+    if (
+        "job" in link_lower
+        or "emploi" in link_lower
+        or "emprego" in link_lower
+        or "vaga" in link_lower
+        or "offre" in link_lower
+    ):
 
-    print(
-        palavra,
-        ":",
-        palavra in html
-    )
+        print(link)
