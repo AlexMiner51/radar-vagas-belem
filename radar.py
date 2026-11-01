@@ -1,8 +1,8 @@
 
-importar json
-solicitações de importação
-importar feedparser
-importar re
+import json
+import requests
+import feedparser
+import re
 from datetime import datetime
 
 BUSCAS = [
