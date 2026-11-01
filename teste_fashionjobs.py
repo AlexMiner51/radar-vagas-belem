@@ -1,31 +1,84 @@
 import requests
 import re
 
-url = (
-    "https://br.fashionjobs.com/"
-    "city/bel%C3%A9m.html"
+
+def buscar_vagas_fashionjobs():
+
+    vagas = []
+
+    url = (
+        "https://br.fashionjobs.com/"
+        "city/bel%C3%A9m.html"
+    )
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 "
+            "(Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 "
+            "(KHTML, like Gecko) "
+            "Chrome/130.0.0.0 "
+            "Safari/537.36"
+        ),
+        "Accept-Language": "pt-BR,pt;q=0.9"
+    }
+
+    try:
+
+        html = requests.get(
+            url,
+            headers=headers,
+            timeout=30
+        ).text
+
+        vagas_encontradas = re.findall(
+            r'<a class="extended-link".*?href="(https://br\.fashionjobs\.com/trabalho/[^"]+)".*?title="([^"]+)"',
+            html,
+            re.DOTALL
+        )
+
+        vistos = set()
+
+        for link, titulo in vagas_encontradas:
+
+            if link in vistos:
+                continue
+
+            vistos.add(link)
+
+            vagas.append(
+                {
+                    "titulo": f"[FashionJobs] {titulo}",
+                    "link": link
+                }
+            )
+
+    except Exception as erro:
+
+        print(
+            "Erro FashionJobs:",
+            erro
+        )
+
+    return vagas
+
+
+vagas = buscar_vagas_fashionjobs()
+
+print()
+
+print(
+    "FashionJobs encontrou",
+    len(vagas),
+    "vagas"
 )
 
-headers = {
-    "User-Agent": (
-        "Mozilla/5.0 "
-        "(Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 "
-        "(KHTML, like Gecko) "
-        "Chrome/130.0.0.0 "
-        "Safari/537.36"
-    ),
-    "Accept-Language": "pt-BR,pt;q=0.9"
-}
+print()
 
-html = requests.get(
-    url,
-    headers=headers,
-    timeout=30
-).text
+for vaga in vagas:
 
-for linha in html.splitlines():
+    print(vaga["titulo"])
 
-    if "/trabalho/" in linha:
+    print(vaga["link"])
 
-        print(linha[:500])
+    print()
