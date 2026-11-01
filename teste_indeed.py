@@ -11,30 +11,29 @@ headers = {
         "Chrome/130.0.0.0 "
         "Safari/537.36"
     ),
+    "Accept": (
+        "text/html,"
+        "application/xhtml+xml,"
+        "application/xml;q=0.9,"
+        "image/avif,"
+        "image/webp,*/*;q=0.8"
+    ),
     "Accept-Language": "pt-BR,pt;q=0.9"
 }
 
-try:
+resposta = requests.get(
+    url,
+    headers=headers,
+    timeout=30
+)
 
-    resposta = requests.get(
-        url,
-        headers=headers,
-        timeout=30
-    )
+print("STATUS:", resposta.status_code)
+print("TAMANHO:", len(resposta.text))
 
-    print(
-        "STATUS:",
-        resposta.status_code
-    )
+print()
+print("=" * 80)
+print()
 
-    print(
-        "TAMANHO:",
-        len(resposta.text)
-    )
-
-except Exception as erro:
-
-    print(
-        "ERRO:",
-        erro
-    )
+print(
+    resposta.text[:2500]
+)
