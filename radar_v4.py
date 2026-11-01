@@ -323,6 +323,7 @@ def buscar_vagas_ciee():
                         ""
                     )
                 )
+                area_normalizada = area.lower()       
                 
                 if area_normalizada in [
                     "administrativa",
