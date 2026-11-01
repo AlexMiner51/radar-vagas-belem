@@ -480,10 +480,14 @@ def main():
 
     vagas_ciee = buscar_vagas_ciee()
 
-    vagas = (
+    vagas_fashionjobs = (
+        buscar_vagas_fashionjobs()
+    )
+        vagas = (
         vagas_google
         + vagas_iel
         + vagas_ciee
+        + vagas_fashionjobs
     )
     
     cabecalho = (
