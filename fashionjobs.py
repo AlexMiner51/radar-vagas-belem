@@ -37,7 +37,7 @@ def buscar_vagas_fashionjobs():
             re.DOTALL
         )
 
-        vistos = set()
+               vistos = set()
 
         for link, titulo in vagas_encontradas:
 
@@ -46,14 +46,14 @@ def buscar_vagas_fashionjobs():
 
             vistos.add(link)
 
-        titulo_normalizado = titulo.lower()
+            titulo_normalizado = titulo.lower()
 
-        if any(
-            palavra in titulo_normalizado
-            for palavra in PALAVRAS_BLOQUEADAS_FASHION
-        ):
-            continue
-            
+            if any(
+                palavra in titulo_normalizado
+                for palavra in PALAVRAS_BLOQUEADAS_FASHION
+            ):
+                continue
+
             vagas.append(
                 {
                     "titulo":
@@ -62,7 +62,6 @@ def buscar_vagas_fashionjobs():
                         link
                 }
             )
-
     except Exception as erro:
 
         print(
