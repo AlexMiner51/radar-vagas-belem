@@ -46,6 +46,14 @@ def buscar_vagas_fashionjobs():
 
             vistos.add(link)
 
+        titulo_normalizado = titulo.lower()
+
+        if any(
+            palavra in titulo_normalizado
+            for palavra in PALAVRAS_BLOQUEADAS_FASHION
+        ):
+            continue
+            
             vagas.append(
                 {
                     "titulo":
