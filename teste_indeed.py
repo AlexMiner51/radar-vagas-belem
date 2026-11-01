@@ -1,7 +1,10 @@
 import requests
-import re
 
-url = "https://br.indeed.com"
+url = (
+    "https://br.indeed.com/jobs"
+    "?q=estagio"
+    "&l=Belém%2C+PA"
+)
 
 headers = {
     "User-Agent": (
@@ -12,38 +15,20 @@ headers = {
         "Chrome/130.0.0.0 "
         "Safari/537.36"
     ),
-    "Accept-Language": "pt-BR,pt;q=0.9"
+    "Accept-Language": "pt-BR,pt;q=0.9",
+    "Referer": "https://www.google.com/"
 }
 
 resposta = requests.get(
     url,
     headers=headers,
-    timeout=30
+    timeout=30,
+    allow_redirects=True
 )
 
 print("STATUS:", resposta.status_code)
-
-html = resposta.text.lower()
-
-termos = [
-    "captcha",
-    "cloudflare",
-    "access denied",
-    "verify",
-    "security",
-    "forbidden",
-    "robot",
-    "bot",
-    "challenge",
-    "blocked"
-]
+print("URL FINAL:", resposta.url)
+print("TAMANHO:", len(resposta.text))
 
 print()
-
-for termo in termos:
-
-    print(
-        termo,
-        ":",
-        termo in html
-    )
+print(resposta.text[:3000])
