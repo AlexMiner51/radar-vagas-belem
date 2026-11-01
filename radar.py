@@ -96,11 +96,11 @@ PALAVRAS_BLOQUEADAS = [
 
 def carregar_histórico():
 
-    tentar:
+    try:
         com open("seen.json", "r", encoding="utf-8") as f:
-            retornar conjunto(json.load(f))
-    exceto:
-        retornar conjunto()
+            return set(json.load(f))
+    except:
+        return set()
 
 
 def salvar_histórico(histórico):
