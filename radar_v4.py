@@ -331,11 +331,7 @@ def buscar_vagas_ciee():
                     )
                 )
 
-                texto = (
-                    area
-                    + " "
-                    + descricao
-                ).lower()
+                texto = area.lower()
 
                 if any(
                     palavra in texto
