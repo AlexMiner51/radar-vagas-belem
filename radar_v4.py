@@ -4,6 +4,7 @@ import requests
 import feedparser
 import re
 from datetime import datetime
+from fashionjobs import buscar_vagas_fashionjobs
 
 BUSCAS = [
     "site:gupy.io estágio tecnologia Belém Pará",
