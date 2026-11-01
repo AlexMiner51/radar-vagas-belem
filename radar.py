@@ -183,7 +183,7 @@ def buscar_vagas_iel():
 
     = []
 
-    tentar:
+    try:
 
         html = solicitações.get(
             "https://carreiras.iel.org.br/PA",
@@ -196,9 +196,9 @@ def buscar_vagas_iel():
             html
         )))
 
-        para link em links:
+        for link em links:
 
-            tentar:
+            try:
 
                 pagina = requests.get(
                     link,
