@@ -323,7 +323,14 @@ def buscar_vagas_ciee():
                         ""
                     )
                 )
-
+                
+                if area_normalizada in [
+                    "administrativa",
+                    "contabilidade",
+                    "campo do direito",
+                    "recursos humanos"
+                ]:
+                    continue
                 descricao = str(
                     vaga.get(
                         "descricao",
