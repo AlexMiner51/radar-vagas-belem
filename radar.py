@@ -1,8 +1,8 @@
-import os
-import json
-import requests
-import feedparser
-import re
+
+importar json
+solicitações de importação
+importar feedparser
+importar re
 from datetime import datetime
 
 BUSCAS = [
@@ -14,7 +14,7 @@ BUSCAS = [
 
     "site:linkedin.com/jobs estágio tecnologia Belém Pará",
     "site:linkedin.com/jobs estágio TI Belém Pará",
-    "site:linkedin.com/jobs estágio computação Belém Pará",
+    "site:linkedin.com/jobs estágio de programação Belém Pará",
 
     "site:indeed.com estágio tecnologia Belém Pará",
     "site:indeed.com estágio TI Belém Pará",
@@ -40,19 +40,19 @@ BUSCAS = [
     "site:estagiotrainee.com computação Belém Pará",
     "site:estagiotrainee.com moda Belém Pará"
     "site:ciadetalentos.com.br/#jobs estágio Belém Pará",
-    "site:ciadetalentos.com.br/#jobs trainee Belém Pará",
+    "site:ciadetalentos.com.br/#jobs estagiário Belém Pará",
     "site:ciadeestagios.com.br/vagas-de-estagio/ estágio Belém Pará",
-    "site:ciadeestagios.com.br/vagas-de-estagio/ trainee Belém Pará",
+    "site:ciadeestagios.com.br/vagas-de-estagio/ estagiário Belém Pará",
     "site:nube.com.br/ estágio Belém Pará",
     "site:nube.com.br/ trainee Belém Pará",
     "site:portal.ciee.org.br/quero-uma-vaga/ estágio Belém Pará",
-    "site:portal.ciee.org.br/quero-uma-vaga/ trainee Belém Pará",
+    "site:portal.ciee.org.br/quero-uma-vaga/ estagiário Belém Pará",
     "site:app.eureca.me/oportunidades estágio Belém Pará",
-    "site:app.eureca.me/oportunidades trainee Belém Pará",
+    "site:app.eureca.me/oportunidades estagiário Belém Pará",
     "site:superestagios.com.br/index/vagasEstagio.php estágio Belém Pará",
-    "site:superestagios.com.br/index/vagasEstagio.php trainee Belém Pará",
+    "site:superestagios.com.br/index/vagasEstagio.php estagiário Belém Pará",
     "site:portalabre.com.br/Vagas.do?action=pesquisar estágio Belém Pará",
-    "site:portalabre.com.br/Vagas.do?action=pesquisar trainee Belém Pará",
+    "site:portalabre.com.br/Vagas.do?action=pesquisar estagiário Belém Pará",
     "site:glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm tecnologia",
     "site:glassdoor.com.br/Vaga/bel%C3%A9m-estagio-vagas-SRCH_IL.0,5_IC2465757_KO6,13.htm moda",
     
@@ -60,57 +60,57 @@ BUSCAS = [
 
 PALAVRAS_OBRIGATORIAS = [
     "belém",
-    "belem",
+    "belém",
     "ananindeua",
-    "para",
-    "pará"
+    "pára",
+    "pára"
 ]
 
 PALAVRAS_ESTAGIO = [
     "estágio",
-    "estagio",
+    "estágio",
     "estagiário",
     "estagiario",
-    "intern"
+    "estagiário"
 ]
 
 PALAVRAS_BLOQUEADAS = [
     "guiné",
-    "guinea",
+    "guiné",
     "guiné-bissau",
     "bissau",
-    "africa",
-    "south africa",
-    "home office",
+    "África",
+    "África do Sul",
+    "escritório em casa",
     "remoto",
-    "remote",
-    "são paulo",
-    "sao paulo",
+    "remoto",
+    "São Paulo",
+    "São Paulo",
     "rio de janeiro",
     "curitiba",
     "porto alegre",
-    "bangkok",
-    "thailand"
+    "Bangkok",
+    "Tailândia"
 ]
 
 
-def carregar_historico():
+def carregar_histórico():
 
-    try:
-        with open("seen.json", "r", encoding="utf-8") as f:
-            return set(json.load(f))
-    except:
-        return set()
+    tentar:
+        com open("seen.json", "r", encoding="utf-8") as f:
+            retornar conjunto(json.load(f))
+    exceto:
+        retornar conjunto()
 
 
-def salvar_historico(historico):
+def salvar_histórico(histórico):
 
-    with open("seen.json", "w", encoding="utf-8") as f:
+    com open("seen.json", "w", encoding="utf-8") as f:
         json.dump(
-            list(historico),
+            lista(histórico),
             f,
-            ensure_ascii=False,
-            indent=2
+            garantir_ascii=Falso,
+            recuo=2
         )
 
 
@@ -118,48 +118,48 @@ def vaga_valida(texto):
 
     texto = texto.lower()
 
-    if not any(p in texto for p in PALAVRAS_OBRIGATORIAS):
-        return False
+    se não houver (p em texto para p em PALAVRAS_OBRIGATORIAS):
+        retornar Falso
 
-    if not any(p in texto for p in PALAVRAS_ESTAGIO):
-        return False
+    if not any(p em texto para p em PALAVRAS_ESTAGIO):
+        retornar Falso
 
-    if any(p in texto for p in PALAVRAS_BLOQUEADAS):
-        return False
+    se houver(p em texto para p em PALAVRAS_BLOQUEADAS):
+        retornar Falso
 
-    return True
+    retornar Verdadeiro
 
 PALAVRAS_INTERESSE = [
     "ti",
-    "t.i",
+    "ti",
     "tecnologia",
-    "informatica",
     "informática",
-    "computacao",
+    "informática",
+    "computação",
     "computação",
     "ciência",
-    "ciencia",
+    "ciência",
     "ciência de dados",
     "dados",
-    "ciencia da computacao",
+    "ciência da computação",
     "ciência da computação",
     "sistemas",
     "sistema",
     "software",
     "desenvolvimento",
-    "programacao",
+    "programação",
     "programação",
     "engenharia de software",
-    "ads",
+    "anúncios",
     "análise e desenvolvimento de sistemas",
-    "analise e desenvolvimento de sistemas",
+    "analisar e desenvolver sistemas",
     "moda",
-    "design",
+    "projeto",
     "design de moda",
     "marketing",
     "publicidade",
     "ux",
-    "ui"
+    "interface do usuário"
 ]
 
 PALAVRAS_BLOQUEADAS_IEL = [
@@ -169,9 +169,9 @@ PALAVRAS_BLOQUEADAS_IEL = [
     "rh",
     "recursos humanos",
     "logística",
-    "logistica",
+    "logística",
     "administração",
-    "administracao",
+    "administração",
     "marketing",
     "publicidade",
     "propaganda",
@@ -182,101 +182,226 @@ PALAVRAS_BLOQUEADAS_IEL = [
 
 def buscar_vagas_iel():
 
-    vagas = []
+    = []
 
-    try:
+    tentar:
 
-        html = requests.get(
+        html = solicitações.get(
             "https://carreiras.iel.org.br/PA",
             headers={"User-Agent": "Mozilla/5.0"},
-            timeout=30
-        ).text
+            tempo limite=30
+        ).texto
 
         links = sorted(set(re.findall(
             r'https://carreiras\.iel\.org\.br/PA/vaga/[^\s"<]+',
             html
         )))
 
-        for link in links:
+        para link em links:
 
-            try:
+            tentar:
 
                 pagina = requests.get(
                     link,
                     headers={"User-Agent": "Mozilla/5.0"},
-                    timeout=30
-                ).text
+                    tempo limite=30
+                ).texto
 
-                titulo = re.search(
-                    r'"title":"([^"]+)"',
-                    pagina
+                título = re.pesquisa(
+                    r'"título":"([^"]+)"',
+                    página
                 )
 
-                cidade = re.search(
+                cidade = re.pesquisa(
                     r'"addressLocality":"([^"]+)"',
-                    pagina
+                    página
                 )
 
-                titulo = (
-                    titulo.group(1)
-                    if titulo else
+                título = (
+                    titulo.grupo(1)
+                    se titulo senão
                     ""
                 )
 
                 titulo_normalizado = titulo.lower()
 
-                if not any(
-                    palavra in titulo_normalizado
-                    for palavra in PALAVRAS_INTERESSE
+                se não houver nenhum(
+                    palavra em titulo_normalizado
+                    para palavra em PALAVRAS_INTERESSE
                 ):
-                    continue
+                    continuar
 
-                if any(
-                    palavra in titulo_normalizado
-                    for palavra in PALAVRAS_BLOQUEADAS_IEL
+                se houver(
+                    palavra em titulo_normalizado
+                    para palavra em PALAVRAS_BLOQUEADAS_IEL
                 ):
-                    continue
+                    continuar
                
                 cidade = (
-                    cidade.group(1)
-                    if cidade else
+                    cidade.grupo(1)
+                    se cidade senão
                     ""
                 )
 
                 cidade_normalizada = cidade.lower()
 
-                if cidade_normalizada not in [
+                se cidade_normalizada não estiver em [
                     "belém",
-                    "belem",
+                    "belém",
                     "ananindeua"
                 ]:
-                    continue
+                    continuar
 
                 vagas.append(
                     {
-                        "titulo": f"[IEL] {titulo}",
+                        "título": f"[IEL] {título}",
                         "link": link
                     }
                 )
 
-            except:
-                pass
+            exceto:
+                passar
 
-    except Exception as erro:
+    exceto Exception como erro:
 
         print("Erro IEL:", erro)
 
-    return vagas
+    retorno
+
+def buscar_vagas_ciee():
+
+    = []
+
+    tentar:
+
+        para página em range(1, 51):
+
+            url = (
+                "https://api.ciee.org.br/vagas/"
+                f"vitrine-vaga/publicadas?page={página}"
+            )
+
+            resposta = requests.get(
+                URL,
+                cabeçalhos={
+                    "User-Agent": "Mozilla/5.0"
+                },
+                tempo limite=30
+            )
+
+            dados = resposta.json()
+
+            para vaga em dados.get(
+                "contente",
+                []
+            ):
+
+                local = vaga.get(
+                    "local"
+                )
+
+                se não for local:
+                    continuar
+
+                cidade = str(
+                    local.get(
+                        "†",
+                        ""
+                    )
+                ).mais baixo()
+
+                se cidade não estiver em [
+                    "belém",
+                    "belém",
+                    "ananindeua"
+                ]:
+                    continuar
+
+                área = str(
+                    vaga.obter(
+                        "áreaProfissional",
+                        ""
+                    )
+                )
+                area_normalizada = area.lower()       
+                
+                se area_normalizada em [
+                    "administrativa",
+                    "contabilidade",
+                    "campo do direito",
+                    "recursos humanos"
+                ]:
+                    continuar
+                descrição = str(
+                    vaga.obter(
+                        "descricao",
+                        ""
+                    )
+                )
+
+                texto = área.lower()
+
+                se houver(
+                    palavra em texto
+                    para palavra em PALAVRAS_BLOQUEADAS_IEL
+                ):
+                    continuar
+
+                se não houver nenhum(
+                    palavra em texto
+                    para palavra em PALAVRAS_INTERESSE
+                ):
+                    continuar
+
+                código = vaga.get(
+                    "codigoVaga"
+                )
+
+                empresa = vaga.get(
+                    "nomeEmpresa",
+                    "Empresa não informada"
+                )
+
+                vagas.append(
+                    {
+                        "título":
+                            f"[CIEE] {área} - {empresa}",
+                        "link":
+                            (
+                                f"https://web.ciee.org.br/login?codigoVaga={codigo}"
+                            )
+                    }
+                )
+
+    exceto Exception como erro:
+
+        imprimir(
+            "Erro CIEE:",
+            erro
+        )
+
+    imprimir(
+        "Vagas CIEE:",
+        len(vagas)
+    )
+
+    para vaga em amigo:
+
+        imprimir(
+            vaga["título"]
+        )
+    
+    retorno
     
 def buscar_vagas():
 
-    vagas = []
+    = []
 
-    historico = carregar_historico()
+    histórico = carregar_histórico()
 
-    for busca in BUSCAS:
+    para busca em BUSCAS:
 
-        try:
+        tentar:
 
             url = (
                 "https://news.google.com/rss/search?q="
@@ -285,48 +410,48 @@ def buscar_vagas():
 
             feed = feedparser.parse(url)
 
-            print(
+            imprimir(
                 "Busca:",
                 busca,
                 "- resultados:",
                 len(feed.entries)
             )
             
-            for item in feed.entries:
+            para item em feed.entries:
 
-                titulo = item.title.strip()
+                título = item.title.strip()
                 link = item.link.strip()
 
                 texto = f"{titulo} {link}"
 
-                if not vaga_valida(texto):
-                    continue
+                se não vaga_valida(texto):
+                    continuar
 
-                if link in historico:
-                    continue
+                se link em histórico:
+                    continuar
 
-                historico.add(link)
+                histórico.adicionar(link)
 
                 vagas.append(
                     {
-                        "titulo": titulo,
+                        "título": título,
                         "link": link
                     }
                 )
 
-        except Exception as erro:
+        exceto Exception como erro:
 
             print("Erro:", erro)
 
-    salvar_historico(historico)
+    salvar_histórico(histórico)
 
-    print(
+    imprimir(
         "Google encontrou",
         len(vagas),
         "vagas"
 )
     
-    return vagas
+    retorno
 
 
 def enviar_telegram(texto):
@@ -336,41 +461,47 @@ def enviar_telegram(texto):
 
     url = f"https://api.telegram.org/bot{token}/sendMessage"
 
-    requests.post(
-        url,
-        data={
+    solicitações.post(
+        URL,
+        dados={
             "chat_id": chat_id,
-            "text": texto[:4000]
+            "texto": texto[:4000]
         },
-        timeout=30
+        tempo limite=30
     )
 
 
 def main():
 
-    vagas_google = buscar_vagas()
+    jo_google = buscar_vagas()
 
     vagas_iel = buscar_vagas_iel()
 
-    vagas = vagas_google + vagas_iel
+    vagas_ciee = buscar_vagas_ciee()
+
+    = (
+        joão_google
+        +seu_iel
+        +sociedade_da_sociedade
+    )
     
-    cabecalho = (
+    cabecallho = (
         f"📢 Radar de Estágios - Belém/PA\n"
         f"{datetime.now().strftime('%d/%m/%Y')}\n\n"
     )
 
-    if not vagas:
+    se não for um:
 
         mensagem = (
             cabecalho
             + "Nenhuma nova vaga encontrada hoje."
         )
 
-    else:
+    outro:
 
         linhas = []
 
-        for vaga in vagas[:15]:
+        para vaga em mercado[:15]:
 
             linhas.append(
                 f"• {vaga['titulo']}\n{vaga['link']}"
@@ -381,5 +512,5 @@ def main():
     enviar_telegram(mensagem)
 
 
-if __name__ == "__main__":
-    main()
+se __name__ == "__main__":
+    principal()
