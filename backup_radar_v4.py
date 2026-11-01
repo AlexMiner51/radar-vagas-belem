@@ -60,7 +60,10 @@ BUSCAS = [
 
 PALAVRAS_OBRIGATORIAS = [
     "belém",
-    "belem"
+    "belem",
+    "ananindeua",
+    "para",
+    "pará"
 ]
 
 PALAVRAS_ESTAGIO = [
@@ -115,7 +118,7 @@ def vaga_valida(texto):
 
     texto = texto.lower()
 
-    if not all(p in texto for p in PALAVRAS_OBRIGATORIAS):
+    if not any(p in texto for p in PALAVRAS_OBRIGATORIAS):
         return False
 
     if not any(p in texto for p in PALAVRAS_ESTAGIO):
@@ -264,6 +267,131 @@ def buscar_vagas_iel():
         print("Erro IEL:", erro)
 
     return vagas
+
+def buscar_vagas_ciee():
+
+    vagas = []
+
+    try:
+
+        for pagina in range(1, 51):
+
+            url = (
+                "https://api.ciee.org.br/vagas/"
+                f"vitrine-vaga/publicadas?page={pagina}"
+            )
+
+            resposta = requests.get(
+                url,
+                headers={
+                    "User-Agent": "Mozilla/5.0"
+                },
+                timeout=30
+            )
+
+            dados = resposta.json()
+
+            for vaga in dados.get(
+                "content",
+                []
+            ):
+
+                local = vaga.get(
+                    "local"
+                )
+
+                if not local:
+                    continue
+
+                cidade = str(
+                    local.get(
+                        "cidade",
+                        ""
+                    )
+                ).lower()
+
+                if cidade not in [
+                    "belém",
+                    "belem",
+                    "ananindeua"
+                ]:
+                    continue
+
+                area = str(
+                    vaga.get(
+                        "areaProfissional",
+                        ""
+                    )
+                )
+                area_normalizada = area.lower()       
+                
+                if area_normalizada in [
+                    "administrativa",
+                    "contabilidade",
+                    "campo do direito",
+                    "recursos humanos"
+                ]:
+                    continue
+                descricao = str(
+                    vaga.get(
+                        "descricao",
+                        ""
+                    )
+                )
+
+                texto = area.lower()
+
+                if any(
+                    palavra in texto
+                    for palavra in PALAVRAS_BLOQUEADAS_IEL
+                ):
+                    continue
+
+                if not any(
+                    palavra in texto
+                    for palavra in PALAVRAS_INTERESSE
+                ):
+                    continue
+
+                codigo = vaga.get(
+                    "codigoVaga"
+                )
+
+                empresa = vaga.get(
+                    "nomeEmpresa",
+                    "Empresa não informada"
+                )
+
+                vagas.append(
+                    {
+                        "titulo":
+                            f"[CIEE] {area} - {empresa}",
+                        "link":
+                            (
+                                f"https://web.ciee.org.br/login?codigoVaga={codigo}"
+                            )
+                    }
+                )
+
+    except Exception as erro:
+
+        print(
+            "Erro CIEE:",
+            erro
+        )
+
+    print(
+        "Vagas CIEE:",
+        len(vagas)
+    )
+
+    for vaga in vagas:
+
+        print(
+            vaga["titulo"]
+        )
+    
+    return vagas
     
 def buscar_vagas():
 
@@ -282,6 +410,13 @@ def buscar_vagas():
 
             feed = feedparser.parse(url)
 
+            print(
+                "Busca:",
+                busca,
+                "- resultados:",
+                len(feed.entries)
+            )
+            
             for item in feed.entries:
 
                 titulo = item.title.strip()
@@ -310,6 +445,12 @@ def buscar_vagas():
 
     salvar_historico(historico)
 
+    print(
+        "Google encontrou",
+        len(vagas),
+        "vagas"
+)
+    
     return vagas
 
 
@@ -336,7 +477,13 @@ def main():
 
     vagas_iel = buscar_vagas_iel()
 
-    vagas = vagas_google + vagas_iel
+    vagas_ciee = buscar_vagas_ciee()
+
+    vagas = (
+        vagas_google
+        + vagas_iel
+        + vagas_ciee
+    )
     
     cabecalho = (
         f"📢 Radar de Estágios - Belém/PA\n"
