@@ -3,7 +3,7 @@ import re
 
 url = (
     "https://br.fashionjobs.com/"
-    "city/bel%25c3%25a9m.html"
+    "city/bel%C3%A9m.html"
 )
 
 headers = {
@@ -25,22 +25,15 @@ html = requests.get(
 ).text
 
 links = re.findall(
-    r'href="([^"]+)"',
+    r'https://br\.fashionjobs\.com/trabalho/[^"]+',
     html
 )
 
-print("TOTAL LINKS:", len(links))
+print(
+    "TOTAL VAGAS:",
+    len(set(links))
+)
 
-for link in links:
+for vaga in sorted(set(links)):
 
-    link_lower = link.lower()
-
-    if (
-        "job" in link_lower
-        or "emploi" in link_lower
-        or "emprego" in link_lower
-        or "vaga" in link_lower
-        or "offre" in link_lower
-    ):
-
-        print(link)
+    print(vaga)
