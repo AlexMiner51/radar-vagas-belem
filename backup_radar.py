@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import feedparser
+import re
 from datetime import datetime
 
 BUSCAS = [
@@ -25,7 +26,7 @@ BUSCAS = [
     "site:gupy.io estágio design de moda Belém Pará",
 
     "site:linkedin.com/jobs estágio moda Belém Pará",
-    "site:linkedin.com/jobs estágio design de moda Belém Pará",
+    "site:linkedin.com/jobs estágio design de moda Belém Pará"
 
     "site:sejatrainee.com.br estágio Belém Pará",
     "site:sejatrainee.com.br tecnologia Belém Pará",
@@ -37,7 +38,7 @@ BUSCAS = [
     "site:estagiotrainee.com tecnologia Belém Pará",
     "site:estagiotrainee.com TI Belém Pará",
     "site:estagiotrainee.com computação Belém Pará",
-    "site:estagiotrainee.com moda Belém Pará",
+    "site:estagiotrainee.com moda Belém Pará"
     "site:ciadetalentos.com.br/#jobs estágio Belém Pará",
     "site:ciadetalentos.com.br/#jobs trainee Belém Pará",
     "site:ciadeestagios.com.br/vagas-de-estagio/ estágio Belém Pará",
@@ -59,6 +60,9 @@ BUSCAS = [
 
 PALAVRAS_OBRIGATORIAS = [
     "belém",
+    "belem",
+    "ananindeua",
+    "para",
     "pará"
 ]
 
@@ -114,7 +118,7 @@ def vaga_valida(texto):
 
     texto = texto.lower()
 
-    if not all(p in texto for p in PALAVRAS_OBRIGATORIAS):
+    if not any(p in texto for p in PALAVRAS_OBRIGATORIAS):
         return False
 
     if not any(p in texto for p in PALAVRAS_ESTAGIO):
@@ -125,7 +129,145 @@ def vaga_valida(texto):
 
     return True
 
+PALAVRAS_INTERESSE = [
+    "ti",
+    "t.i",
+    "tecnologia",
+    "informatica",
+    "informática",
+    "computacao",
+    "computação",
+    "ciência",
+    "ciencia",
+    "ciência de dados",
+    "dados",
+    "ciencia da computacao",
+    "ciência da computação",
+    "sistemas",
+    "sistema",
+    "software",
+    "desenvolvimento",
+    "programacao",
+    "programação",
+    "engenharia de software",
+    "ads",
+    "análise e desenvolvimento de sistemas",
+    "analise e desenvolvimento de sistemas",
+    "moda",
+    "design",
+    "design de moda",
+    "marketing",
+    "publicidade",
+    "ux",
+    "ui"
+]
 
+PALAVRAS_BLOQUEADAS_IEL = [
+    "contábeis",
+    "contabeis",
+    "contabilidade",
+    "rh",
+    "recursos humanos",
+    "logística",
+    "logistica",
+    "administração",
+    "administracao",
+    "marketing",
+    "publicidade",
+    "propaganda",
+    "comunicação",
+    "jonalismo",
+    "comunicação social"
+]
+
+def buscar_vagas_iel():
+
+    vagas = []
+
+    try:
+
+        html = requests.get(
+            "https://carreiras.iel.org.br/PA",
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=30
+        ).text
+
+        links = sorted(set(re.findall(
+            r'https://carreiras\.iel\.org\.br/PA/vaga/[^\s"<]+',
+            html
+        )))
+
+        for link in links:
+
+            try:
+
+                pagina = requests.get(
+                    link,
+                    headers={"User-Agent": "Mozilla/5.0"},
+                    timeout=30
+                ).text
+
+                titulo = re.search(
+                    r'"title":"([^"]+)"',
+                    pagina
+                )
+
+                cidade = re.search(
+                    r'"addressLocality":"([^"]+)"',
+                    pagina
+                )
+
+                titulo = (
+                    titulo.group(1)
+                    if titulo else
+                    ""
+                )
+
+                titulo_normalizado = titulo.lower()
+
+                if not any(
+                    palavra in titulo_normalizado
+                    for palavra in PALAVRAS_INTERESSE
+                ):
+                    continue
+
+                if any(
+                    palavra in titulo_normalizado
+                    for palavra in PALAVRAS_BLOQUEADAS_IEL
+                ):
+                    continue
+               
+                cidade = (
+                    cidade.group(1)
+                    if cidade else
+                    ""
+                )
+
+                cidade_normalizada = cidade.lower()
+
+                if cidade_normalizada not in [
+                    "belém",
+                    "belem",
+                    "ananindeua"
+                ]:
+                    continue
+
+                vagas.append(
+                    {
+                        "titulo": f"[IEL] {titulo}",
+                        "link": link
+                    }
+                )
+
+            except:
+                pass
+
+    except Exception as erro:
+
+        print("Erro IEL:", erro)
+
+    return vagas
+    
 def buscar_vagas():
 
     vagas = []
@@ -143,6 +285,13 @@ def buscar_vagas():
 
             feed = feedparser.parse(url)
 
+            print(
+                "Busca:",
+                busca,
+                "- resultados:",
+                len(feed.entries)
+            )
+            
             for item in feed.entries:
 
                 titulo = item.title.strip()
@@ -171,6 +320,12 @@ def buscar_vagas():
 
     salvar_historico(historico)
 
+    print(
+        "Google encontrou",
+        len(vagas),
+        "vagas"
+)
+    
     return vagas
 
 
@@ -193,8 +348,12 @@ def enviar_telegram(texto):
 
 def main():
 
-    vagas = buscar_vagas()
+    vagas_google = buscar_vagas()
 
+    vagas_iel = buscar_vagas_iel()
+
+    vagas = vagas_google + vagas_iel
+    
     cabecalho = (
         f"📢 Radar de Estágios - Belém/PA\n"
         f"{datetime.now().strftime('%d/%m/%Y')}\n\n"
