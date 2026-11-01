@@ -1,4 +1,3 @@
-
 import json
 import requests
 import feedparser
@@ -97,7 +96,7 @@ PALAVRAS_BLOQUEADAS = [
 def carregar_histórico():
 
     try:
-        com open("seen.json", "r", encoding="utf-8") as f:
+        with open("seen.json", "r", encoding="utf-8") as f:
             return set(json.load(f))
     except:
         return set()
@@ -105,11 +104,11 @@ def carregar_histórico():
 
 def salvar_histórico(histórico):
 
-    com open("seen.json", "w", encoding="utf-8") as f:
+    with open("seen.json", "w", encoding="utf-8") as f:
         json.dump(
             lista(histórico),
             f,
-            garantir_ascii=Falso,
+            garantir_ascii=False,
             recuo=2
         )
 
@@ -118,16 +117,16 @@ def vaga_valida(texto):
 
     texto = texto.lower()
 
-    se não houver (p em texto para p em PALAVRAS_OBRIGATORIAS):
-        retornar Falso
+    if any(p em texto para p em PALAVRAS_OBRIGATORIAS):
+        return False
 
     if not any(p em texto para p em PALAVRAS_ESTAGIO):
-        retornar Falso
+        return False
 
-    se houver(p em texto para p em PALAVRAS_BLOQUEADAS):
-        retornar Falso
+    if any(p em texto para p em PALAVRAS_BLOQUEADAS):
+        return False
 
-    retornar Verdadeiro
+    return True
 
 PALAVRAS_INTERESSE = [
     "ti",
