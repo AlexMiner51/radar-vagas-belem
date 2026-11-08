@@ -1,7 +1,6 @@
 import requests
-import re
 
-url = "https://www.nube.com.br"
+url = "https://www.nube.com.br/nube_rss"
 
 headers = {
     "User-Agent": (
@@ -14,20 +13,14 @@ headers = {
     )
 }
 
-html = requests.get(
+resposta = requests.get(
     url,
     headers=headers,
     timeout=30
-).text
-
-links = re.findall(
-    r'href="([^"]+)"',
-    html
 )
 
-print("TOTAL LINKS:", len(links))
+print("STATUS:", resposta.status_code)
+
 print()
 
-for link in links[:100]:
-
-    print(link)
+print(resposta.text[:5000])
