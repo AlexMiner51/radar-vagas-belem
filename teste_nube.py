@@ -1,7 +1,15 @@
 import requests
-import re
 
-url = "https://www.nube.com.br"
+urls = [
+
+    "https://www.nube.com.br/vagas",
+    "https://www.nube.com.br/estagio",
+    "https://www.nube.com.br/estagios",
+    "https://www.nube.com.br/oportunidades",
+    "https://www.nube.com.br/vagas-de-estagio",
+    "https://www.nube.com.br/painel-de-vagas"
+
+]
 
 headers = {
     "User-Agent": (
@@ -14,45 +22,24 @@ headers = {
     )
 }
 
-html = requests.get(
-    url,
-    headers=headers,
-    timeout=30
-).text.lower()
+for url in urls:
 
-palavras = [
-    "vaga",
-    "vagas",
-    "estagio",
-    "estágio",
-    "oportunidade",
-    "oportunidades",
-    "aprendiz",
-    "aprendizagem"
-]
+    try:
 
-for palavra in palavras:
-
-    print()
-    print("=" * 50)
-
-    print("PALAVRA:", palavra)
-
-    pos = html.find(palavra)
-
-    if pos == -1:
-
-        print("NAO ENCONTRADA")
-
-    else:
-
-        inicio = max(0, pos - 200)
-
-        fim = min(
-            len(html),
-            pos + 500
+        resposta = requests.get(
+            url,
+            headers=headers,
+            timeout=30,
+            allow_redirects=True
         )
 
-        print(
-            html[inicio:fim]
-        )
+        print()
+        print("=" * 70)
+        print(url)
+        print("STATUS:", resposta.status_code)
+        print("URL FINAL:", resposta.url)
+
+    except Exception as erro:
+
+        print(url)
+        print("ERRO:", erro)
