@@ -1,4 +1,5 @@
 import requests
+import re
 
 url = "https://trabalheconosco.vagas.com.br/vagas"
 
@@ -13,24 +14,23 @@ headers = {
     )
 }
 
-resposta = requests.get(
+html = requests.get(
     url,
     headers=headers,
     timeout=30
+).text
+
+print("STATUS:", 200)
+print()
+
+padroes = re.findall(
+    r'/vagas/[^\s"<>]+',
+    html
 )
 
-print("STATUS:", resposta.status_code)
-
+print("TOTAL PADROES:", len(set(padroes)))
 print()
 
-print("URL FINAL:")
-print(resposta.url)
+for item in sorted(set(padroes))[:100]:
 
-print()
-
-print("TAMANHO:")
-print(len(resposta.text))
-
-print()
-
-print(resposta.text[:3000])
+    print(item)
