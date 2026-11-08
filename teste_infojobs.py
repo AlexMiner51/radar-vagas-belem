@@ -1,4 +1,5 @@
 import requests
+import re
 
 url = "https://www.infojobs.com.br"
 
@@ -13,11 +14,20 @@ headers = {
     )
 }
 
-resposta = requests.get(
+html = requests.get(
     url,
     headers=headers,
     timeout=30
+).text
+
+links = re.findall(
+    r'href="([^"]+)"',
+    html
 )
 
-print("STATUS:", resposta.status_code)
-print("TAMANHO:", len(resposta.text))
+print("TOTAL LINKS:", len(links))
+print()
+
+for link in links[:150]:
+
+    print(link)
