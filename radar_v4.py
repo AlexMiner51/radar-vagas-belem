@@ -491,7 +491,7 @@ def main():
         + vagas_ciee
         + vagas_fashionjobs
     )
-        vagas_novas = []
+    vagas_novas = []
 
     for vaga in vagas:
 
