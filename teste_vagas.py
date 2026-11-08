@@ -1,5 +1,4 @@
 import requests
-import re
 
 url = "https://www.vagas.com.br"
 
@@ -18,16 +17,42 @@ html = requests.get(
     url,
     headers=headers,
     timeout=30
-).text
+).text.lower()
 
-links = re.findall(
-    r'href="([^"]+)"',
-    html
-)
+palavras = [
+    "vaga",
+    "vagas",
+    "estagio",
+    "estágio",
+    "emprego",
+    "oportunidade",
+    "oportunidades",
+    "trabalheconosco",
+    "busca"
+]
 
-print("TOTAL LINKS:", len(links))
-print()
+for palavra in palavras:
 
-for link in links[:150]:
+    print()
+    print("=" * 60)
+    print("PALAVRA:", palavra)
 
-    print(link)
+    pos = html.find(palavra)
+
+    if pos == -1:
+
+        print("NAO ENCONTRADA")
+
+    else:
+
+        inicio = max(
+            0,
+            pos - 300
+        )
+
+        fim = min(
+            len(html),
+            pos + 700
+        )
+
+        print(html[inicio:fim])
