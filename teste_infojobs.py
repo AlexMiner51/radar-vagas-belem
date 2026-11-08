@@ -1,7 +1,9 @@
 import requests
-import re
 
-url = "https://www.infojobs.com.br"
+url = (
+    "https://www.infojobs.com.br/empregos.aspx"
+    "?palabra=estagio"
+)
 
 headers = {
     "User-Agent": (
@@ -14,20 +16,21 @@ headers = {
     )
 }
 
-html = requests.get(
+resposta = requests.get(
     url,
     headers=headers,
     timeout=30
-).text
-
-links = re.findall(
-    r'href="([^"]+)"',
-    html
 )
 
-print("TOTAL LINKS:", len(links))
+print("STATUS:", resposta.status_code)
+
 print()
+print("URL FINAL:")
+print(resposta.url)
 
-for link in links[:150]:
+print()
+print("TAMANHO:")
+print(len(resposta.text))
 
-    print(link)
+print()
+print(resposta.text[:5000])
