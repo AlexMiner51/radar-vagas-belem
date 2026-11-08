@@ -1,6 +1,7 @@
 import requests
+import re
 
-url = "https://www.nube.com.br/nube_rss"
+url = "https://www.nube.com.br"
 
 headers = {
     "User-Agent": (
@@ -13,14 +14,45 @@ headers = {
     )
 }
 
-resposta = requests.get(
+html = requests.get(
     url,
     headers=headers,
     timeout=30
-)
+).text.lower()
 
-print("STATUS:", resposta.status_code)
+palavras = [
+    "vaga",
+    "vagas",
+    "estagio",
+    "estágio",
+    "oportunidade",
+    "oportunidades",
+    "aprendiz",
+    "aprendizagem"
+]
 
-print()
+for palavra in palavras:
 
-print(resposta.text[:5000])
+    print()
+    print("=" * 50)
+
+    print("PALAVRA:", palavra)
+
+    pos = html.find(palavra)
+
+    if pos == -1:
+
+        print("NAO ENCONTRADA")
+
+    else:
+
+        inicio = max(0, pos - 200)
+
+        fim = min(
+            len(html),
+            pos + 500
+        )
+
+        print(
+            html[inicio:fim]
+        )
