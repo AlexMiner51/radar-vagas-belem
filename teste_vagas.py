@@ -1,6 +1,6 @@
 import requests
 
-url = "https://www.vagas.com.br"
+url = "https://trabalheconosco.vagas.com.br/vagas"
 
 headers = {
     "User-Agent": (
@@ -13,46 +13,24 @@ headers = {
     )
 }
 
-html = requests.get(
+resposta = requests.get(
     url,
     headers=headers,
     timeout=30
-).text.lower()
+)
 
-palavras = [
-    "vaga",
-    "vagas",
-    "estagio",
-    "estágio",
-    "emprego",
-    "oportunidade",
-    "oportunidades",
-    "trabalheconosco",
-    "busca"
-]
+print("STATUS:", resposta.status_code)
 
-for palavra in palavras:
+print()
 
-    print()
-    print("=" * 60)
-    print("PALAVRA:", palavra)
+print("URL FINAL:")
+print(resposta.url)
 
-    pos = html.find(palavra)
+print()
 
-    if pos == -1:
+print("TAMANHO:")
+print(len(resposta.text))
 
-        print("NAO ENCONTRADA")
+print()
 
-    else:
-
-        inicio = max(
-            0,
-            pos - 300
-        )
-
-        fim = min(
-            len(html),
-            pos + 700
-        )
-
-        print(html[inicio:fim])
+print(resposta.text[:3000])
