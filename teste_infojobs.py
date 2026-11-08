@@ -2,7 +2,7 @@ import requests
 
 url = (
     "https://www.infojobs.com.br/empregos.aspx"
-    "?palabra=estagio"
+    "?palabra=estagio+belem"
 )
 
 headers = {
@@ -25,12 +25,27 @@ resposta = requests.get(
 print("STATUS:", resposta.status_code)
 
 print()
+
 print("URL FINAL:")
 print(resposta.url)
 
 print()
+
 print("TAMANHO:")
 print(len(resposta.text))
 
-print()
-print(resposta.text[:5000])
+html = resposta.text.lower()
+
+for palavra in [
+    "belém",
+    "belem",
+    "pará",
+    "para",
+    "ananindeua"
+]:
+
+    print(
+        palavra,
+        ":",
+        palavra in html
+    )
