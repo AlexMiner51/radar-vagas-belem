@@ -1,4 +1,5 @@
 import requests
+import re
 
 url = "https://www.vagas.com.br"
 
@@ -13,17 +14,20 @@ headers = {
     )
 }
 
-try:
+html = requests.get(
+    url,
+    headers=headers,
+    timeout=30
+).text
 
-    resposta = requests.get(
-        url,
-        headers=headers,
-        timeout=30
-    )
+links = re.findall(
+    r'href="([^"]+)"',
+    html
+)
 
-    print("STATUS:", resposta.status_code)
-    print("TAMANHO:", len(resposta.text))
+print("TOTAL LINKS:", len(links))
+print()
 
-except Exception as erro:
+for link in links[:150]:
 
-    print("ERRO:", erro)
+    print(link)
