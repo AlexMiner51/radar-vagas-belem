@@ -1,4 +1,5 @@
 import requests
+import re
 
 url = "https://www.nube.com.br"
 
@@ -13,24 +14,20 @@ headers = {
     )
 }
 
-try:
+html = requests.get(
+    url,
+    headers=headers,
+    timeout=30
+).text
 
-    resposta = requests.get(
-        url,
-        headers=headers,
-        timeout=30
-    )
+links = re.findall(
+    r'href="([^"]+)"',
+    html
+)
 
-    print("STATUS:", resposta.status_code)
+print("TOTAL LINKS:", len(links))
+print()
 
-    print(
-        "TAMANHO:",
-        len(resposta.text)
-    )
+for link in links[:100]:
 
-except Exception as erro:
-
-    print(
-        "ERRO:",
-        erro
-    )
+    print(link)
