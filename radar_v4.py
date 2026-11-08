@@ -474,6 +474,8 @@ def enviar_telegram(texto):
 
 def main():
 
+    historico = carregar_historico()
+    
     vagas_google = buscar_vagas()
 
     vagas_iel = buscar_vagas_iel()
@@ -489,7 +491,21 @@ def main():
         + vagas_ciee
         + vagas_fashionjobs
     )
-    
+        vagas_novas = []
+
+    for vaga in vagas:
+
+        link = vaga["link"]
+
+        if link in historico:
+            continue
+
+        historico.add(link)
+
+        vagas_novas.append(vaga)
+
+    vagas = vagas_novas
+
     cabecalho = (
         f"📢 Radar de Estágios - Belém/PA\n"
         f"{datetime.now().strftime('%d/%m/%Y')}\n\n"
@@ -513,6 +529,8 @@ def main():
             )
 
         mensagem = cabecalho + "\n\n".join(linhas)
+
+    salvar_historico(historico)
 
     enviar_telegram(mensagem)
 
